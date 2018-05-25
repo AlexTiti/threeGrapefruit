@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.findtech.threePomelos.music.activity.PlayDetailActivity">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        ></View>
+
+    <RelativeLayout
+        android:id="@+id/layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:layout_below="@+id/view">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_23"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:src="@drawable/back_play_detail" />
+
+        <RelativeLayout
+            android:id="@+id/music_link_layout"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/share_playDetail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_18"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/bluth_car" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/share_playDetail"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/link_icon"
+                android:textColor="@color/text_pink"
+                android:textSize="@dimen/sp_10" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+<RelativeLayout
+    android:id="@+id/Rela_round_play"
+    android:layout_width="@dimen/dp_210"
+    android:layout_height="@dimen/dp_210"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_below="@+id/layout_toolbar"
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/play_sit">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/dp_4"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_centerInParent="true"
+        android:src="@drawable/play_flash"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/img_round_detail"
+        android:layout_width="@dimen/dp_130"
+        android:layout_height="@dimen/dp_130"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:background="@drawable/face_music_car_a"
+        />
+    <ImageView
+        android:layout_marginRight="@dimen/dp_5"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/play_card_detail"/>
+
+</RelativeLayout>
+
+    <TextView
+        android:id="@+id/music_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_18"
+        android:layout_below="@id/Rela_round_play"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/sp_15" />
+
+    <com.findtech.threePomelos.view.PlayerSeekBar
+        android:id="@+id/voice_seekbar"
+        android:layout_width="@dimen/dp_280"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Rela_round_play"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_18"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:maxHeight="@dimen/dp_1"
+        android:minHeight="@dimen/dp_1"
+        android:progressDrawable="@drawable/play_seekbar"
+        android:secondaryProgress="0"
+        android:thumb="@drawable/play_plybar_btn"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/linear_middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/music_name"
+        android:layout_marginRight="@dimen/dp_30"
+        android:layout_marginLeft="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_50"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_20"
+            android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/play_mode"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_centerInParent="true"
+            android:src="@drawable/icon_playorder"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/dp_20">
+            <ImageView
+                android:id="@+id/image_down"
+                android:layout_width="@dimen/dp_20"
+                android:layout_centerInParent="true"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_down_play"/>
+
+            <TextView
+                android:id="@+id/text_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/img_down"
+                android:gravity="center"
+                android:paddingRight="@dimen/dp_5"
+                android:textColor="@color/red_color"
+                android:textSize="@dimen/sp_15" />
+            <ImageView
+                android:id="@+id/img_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_downed"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="@dimen/dp_8"
+                android:visibility="gone"
+                android:alpha="0.3"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/y20"
+            android:layout_weight="1">
+        <ImageView
+            android:id="@+id/image_collection"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_baby_like"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_20"
+            android:layout_weight="1">
+        <ImageView
+            android:id="@+id/image_voice"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/icon_voice"/>
+        </RelativeLayout>
+    </LinearLayout>
+    
+    <ImageButton
+        android:id="@+id/image_line_divier"
+        android:layout_width="@dimen/dp_258"
+        android:layout_height="@dimen/dp_1"
+        android:src="#e5e5e5"
+        android:layout_below="@+id/linear_middle"
+        android:layout_marginTop="@dimen/dp_14"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        />
+
+    <com.findtech.threePomelos.view.PlayerSeekBar
+        android:id="@+id/play_seek"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="@dimen/dp_240"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_middle"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_centerHorizontal="true"
+        android:maxHeight="@dimen/dp_1"
+        android:minHeight="@dimen/dp_1"
+        android:progressDrawable="@drawable/play_seekbar"
+        android:secondaryProgress="0"
+        android:thumb="@drawable/play_plybar_btn" />
+
+    <TextView
+        android:id="@+id/time_play"
+        android:layout_toLeftOf="@+id/play_seek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/play_seek"
+        android:layout_alignTop="@+id/play_seek"
+        android:gravity="center"
+        android:text="00:00"
+       />
+
+    <TextView
+        android:id="@+id/mduration"
+        android:layout_toRightOf="@+id/play_seek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/play_seek"
+        android:layout_alignTop="@+id/play_seek"
+        android:gravity="center"
+
+   />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/play_seek"
+        android:layout_alignParentBottom="true"
+        >
+
+
+        <ImageView
+            android:id="@+id/image_control"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_52"
+            android:scaleType="fitCenter"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/button_play"/>
+        
+        <ImageView
+            android:id="@+id/image_next"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:padding="@dimen/dp_3"
+            android:src="@drawable/button_next"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image_control"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="@dimen/dp_35"
+            />
+
+        <ImageView
+            android:id="@+id/image_prev"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_alignTop="@+id/image_next"
+            android:layout_marginEnd="39dp"
+            android:layout_toStartOf="@+id/image_control"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="@dimen/dp_3"
+            android:scaleType="fitCenter"
+            android:src="@drawable/button_pre" />
+
+
+        
+        
+    </RelativeLayout>
+
+
+</RelativeLayout>

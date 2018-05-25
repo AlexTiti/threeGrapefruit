@@ -1,0 +1,77 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/btn_white_down"
+  >
+    <RelativeLayout
+        android:id="@+id/Rea"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_220"
+        android:background="@color/text_pink"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_layout_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/image_baby_info"
+        android:layout_width="@dimen/dp_74"
+        android:layout_height="@dimen/dp_74"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:background="@drawable/user_img_bac"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/baby_info_recyclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/baby_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:layout_marginTop="@dimen/dp_8"
+        android:ellipsize="end"
+        android:maxLength="15"
+        android:singleLine="true"
+        android:text="@string/baby_niName"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_baby_info" />
+
+    <ImageView
+        android:id="@+id/ivChangeName"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="8dp"
+        android:background="@mipmap/personal_nameedit_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/baby_name"
+        app:layout_constraintStart_toEndOf="@+id/baby_name"
+        app:layout_constraintTop_toTopOf="@+id/baby_name" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/baby_info_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Rea" />
+
+
+
+</android.support.constraint.ConstraintLayout>

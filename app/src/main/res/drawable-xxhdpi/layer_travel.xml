@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item >
+    <rotate
+        android:drawable="@drawable/travel_line_v"
+        android:fromDegrees="90"
+        />
+</item>
+</layer-list>

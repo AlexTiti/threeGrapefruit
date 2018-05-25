@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+    <item android:drawable="@drawable/travel_detail_bg"
+        android:gravity="center"
+       />
+
+    <item android:drawable="@drawable/travel_selected"
+        android:top="@dimen/dp_15"
+        android:left="@dimen/dp_8"
+        android:right="@dimen/dp_8"
+        />
+
+</layer-list>

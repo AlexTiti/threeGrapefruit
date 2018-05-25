@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/includeInstructions"
+        layout="@layout/toolbar_layout_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+      />
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeInstructions">
+
+        <TextView
+            android:id="@+id/text_common"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/y30"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/common_problem"
+            android:textColor="@color/text_pink" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="@dimen/y16"
+            android:layout_gravity="center_vertical"
+            android:background="@color/text_pink">
+        </View>
+
+        <TextView
+            android:id="@+id/text_instruction"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/instruc"
+            android:textColor="@color/text_grey" />
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/board_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear">
+    </View>
+
+    <ProgressBar
+        android:id="@+id/pb_user_protect"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x5"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pb_user_protect">
+    </WebView>
+
+</android.support.constraint.ConstraintLayout>

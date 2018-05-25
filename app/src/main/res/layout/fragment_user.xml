@@ -1,0 +1,444 @@
+
+<android.support.design.widget.CoordinatorLayout   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250"
+       >
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/user_bg"
+            app:contentScrim="@color/white"
+            layout_collapseParallaxMultiplier="0.8"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/toolbar">
+
+            <ImageView
+                android:id="@+id/imageHeadView"
+                android:layout_width="@dimen/dp_74"
+                android:layout_height="@dimen/dp_74"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginTop="@dimen/dp_62"
+                android:background="@drawable/user_img_bac"
+                android:padding="@dimen/dp_1"
+                android:layout_gravity="center_horizontal|top"
+                 />
+
+            <TextView
+                android:id="@+id/userNickName"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_27"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/dialog_bac"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingRight="@dimen/dp_5"
+                android:text="@string/app_name"
+                android:textSize="@dimen/sp_14"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="@dimen/dp_80"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center"
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                >
+                    <TextView
+                        android:id="@+id/tv_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0"
+                        android:gravity="center"
+                        android:textSize="@dimen/sp_18"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.v7.widget.Toolbar>
+            
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+        
+    </android.support.design.widget.AppBarLayout>
+    
+<android.support.v4.widget.NestedScrollView
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:text="@string/baby_user"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:srcCompat="@drawable/icon_add_baby" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvBaby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_22"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <ViewStub
+            android:id="@+id/tvAddBaby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_22"
+            android:layout="@layout/text_user"
+            android:textColor="@color/hint_text"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <include
+            android:id="@+id/includeBaby"
+            layout="@layout/diversion"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_7"
+            android:layout_marginTop="@dimen/dp_36"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvBaby" />
+
+
+        <TextView
+            android:id="@+id/tvDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_21"
+            android:text="@string/text_activity_title_device"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/includeBaby" />
+
+        <ImageView
+            android:id="@+id/ivAddDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDevice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDevice"
+            app:srcCompat="@drawable/icon_add_baby" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvDevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_22"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDevice">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <ViewStub
+            android:id="@+id/tvAddDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_22"
+            android:layout="@layout/text_user"
+            android:textColor="@color/hint_text"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDevice" />
+
+        <include
+            android:id="@+id/includeDevice"
+            layout="@layout/diversion"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_7"
+            android:layout_marginTop="@dimen/dp_48"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvDevice" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="@string/my_music"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/includeDevice" />
+
+        <ImageView
+            android:id="@+id/ivCollect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_23"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            app:srcCompat="@drawable/icon_collect" />
+
+        <TextView
+            android:id="@+id/tvCollectMusic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/collect_music"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            android:padding="@dimen/dp_2"
+            app:layout_constraintBottom_toBottomOf="@+id/ivCollect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivCollect"
+            app:layout_constraintTop_toTopOf="@+id/ivCollect" />
+
+        <TextView
+            android:id="@+id/numberMusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_16"
+
+            app:layout_constraintBottom_toBottomOf="@+id/ivCollect"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivCollect" />
+
+        <ImageView
+            android:id="@+id/ivDownLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_23"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivCollect"
+            app:layout_goneMarginTop="@dimen/dp_25"
+            app:srcCompat="@drawable/icon_down" />
+
+        <TextView
+            android:id="@+id/tvDownMusic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/down_music"
+            android:padding="@dimen/dp_2"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintBottom_toBottomOf="@+id/ivDownLoad"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivDownLoad"
+            app:layout_constraintTop_toTopOf="@+id/ivDownLoad" />
+
+        <TextView
+            android:id="@+id/tvDownLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_16"
+
+            app:layout_constraintBottom_toBottomOf="@+id/ivDownLoad"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivDownLoad" />
+
+        <include
+            android:id="@+id/includeMusic"
+            layout="@layout/diversion"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_7"
+            android:layout_marginTop="@dimen/dp_26"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivDownLoad" />
+
+        <TextView
+            android:id="@+id/tvHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_21"
+            android:text="@string/use_help"
+            android:padding="@dimen/dp_2"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/includeMusic" />
+
+        <ImageView
+            android:id="@+id/ivExplain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_23"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelp"
+            app:srcCompat="@drawable/icon_explain" />
+
+        <ImageView
+
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            android:src="@drawable/more_action"
+            app:layout_constraintBottom_toBottomOf="@+id/ivExplain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivExplain" />
+
+        <TextView
+            android:id="@+id/tvExplain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/explain"
+            android:padding="@dimen/dp_2"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintBottom_toBottomOf="@+id/ivExplain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivExplain"
+            app:layout_constraintTop_toTopOf="@+id/ivExplain" />
+
+        <ImageView
+            android:id="@+id/ivFeedBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_23"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivExplain"
+            app:srcCompat="@drawable/icon_feedback" />
+
+        <TextView
+            android:id="@+id/tvFeedBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/problem_feedback"
+            android:padding="@dimen/dp_2"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFeedBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivFeedBack"
+            app:layout_constraintTop_toTopOf="@+id/ivFeedBack" />
+        <ImageView
+
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            android:src="@drawable/more_action"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFeedBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivFeedBack" />
+
+        <ImageView
+            android:id="@+id/ivSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_23"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivFeedBack"
+            app:srcCompat="@drawable/icon_set" />
+
+        <TextView
+            android:id="@+id/tvSet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/settings"
+            android:padding="@dimen/dp_2"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivSet"
+            app:layout_constraintTop_toTopOf="@+id/ivSet" />
+
+        <ImageView
+
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            android:src="@drawable/more_action"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivSet" />
+
+        <include
+            android:id="@+id/includeHelp"
+            layout="@layout/diversion"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_7"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_23"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivSet" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

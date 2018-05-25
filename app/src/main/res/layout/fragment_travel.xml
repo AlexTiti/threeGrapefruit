@@ -1,0 +1,506 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_370"
+            android:src="@drawable/travel_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_80"
+            android:text="@string/_23"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_48"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="空气质量"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="@+id/tv_weather"
+            app:layout_constraintTop_toBottomOf="@+id/tv_weather" />
+
+        <TextView
+            android:id="@+id/tv_quality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="优"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_28"
+            app:layout_constraintEnd_toEndOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <ImageView
+            android:id="@+id/cardView_plan"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_190"
+            android:layout_marginTop="@dimen/dp_320"
+            android:scaleType="fitCenter"
+            android:src="@drawable/travel_date_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_currentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_22"
+            android:text="@string/current_tv"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/cardView_plan"
+            app:layout_constraintTop_toTopOf="@+id/cardView_plan" />
+
+        <TextView
+            android:id="@+id/tv_mon_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_64"
+            android:text="@string/monday"
+            android:textColor="@color/text_black_color"
+
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_tue_day"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cardView_plan" />
+
+        <TextView
+            android:id="@+id/tv_wed_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wednesday"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toStartOf="@+id/tv_thu_day"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_tue_day"
+            app:layout_constraintTop_toTopOf="@+id/tv_mon_day" />
+
+        <TextView
+            android:id="@+id/tv_thu_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thrsday"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toStartOf="@+id/tv_fir_day"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_wed_day"
+            app:layout_constraintTop_toTopOf="@+id/tv_wed_day" />
+
+        <TextView
+            android:id="@+id/tv_fir_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friday"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toStartOf="@+id/tv_sat_day"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_thu_day"
+            app:layout_constraintTop_toTopOf="@+id/tv_thu_day" />
+
+        <TextView
+            android:id="@+id/tv_sat_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saturday"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toStartOf="@+id/tv_sun_day"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_fir_day"
+            app:layout_constraintTop_toTopOf="@+id/tv_fir_day" />
+
+        <TextView
+            android:id="@+id/tv_sun_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="@string/sunday"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_sat_day"
+            app:layout_constraintTop_toTopOf="@+id/tv_sat_day" />
+
+        <TextView
+            android:id="@+id/tv_tue_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tuesday"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toStartOf="@+id/tv_wed_day"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_mon_day"
+            app:layout_constraintTop_toTopOf="@+id/tv_mon_day" />
+
+        <TextView
+            android:id="@+id/tv_mon_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@+id/tv_mon_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_mon_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_day" />
+
+        <TextView
+            android:id="@+id/tv_tue_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+
+            app:layout_constraintEnd_toEndOf="@+id/tv_tue_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_tue_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tue_day" />
+
+        <TextView
+            android:id="@+id/tv_wed_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@+id/tv_wed_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_wed_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_wed_day" />
+
+        <TextView
+            android:id="@+id/tv_thu_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@+id/tv_thu_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_thu_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thu_day" />
+
+        <TextView
+            android:id="@+id/tv_fir_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@+id/tv_fir_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_fir_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fir_day" />
+
+        <TextView
+            android:id="@+id/tv_sat_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@+id/tv_sat_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_sat_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sat_day" />
+
+        <TextView
+            android:id="@+id/tv_sun_calendar"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+
+            android:textColor="@color/select_tv_color"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="@+id/tv_sun_day"
+            app:layout_constraintStart_toStartOf="@+id/tv_sun_day"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sun_day" />
+
+        <ViewStub
+            android:id="@+id/viewStubMon"
+            android:layout_width="@dimen/dp_5"
+            android:layout_height="@dimen/dp_5"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/tv_mon_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_mon_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+        <ViewStub
+            android:id="@+id/viewStubTue"
+            android:layout_width="@dimen/dp_5"
+            android:layout_height="@dimen/dp_5"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/tv_tue_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_tue_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+        <ViewStub
+            android:id="@+id/viewStubFir"
+            android:layout_width="@dimen/dp_5"
+            android:layout_height="@dimen/dp_5"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/tv_fir_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_fir_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+        <ViewStub
+            android:id="@+id/viewStubWed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            app:layout_constraintEnd_toEndOf="@+id/tv_wed_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_wed_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+        <ViewStub
+            android:id="@+id/viewStubThr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            app:layout_constraintEnd_toEndOf="@+id/tv_thu_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_thu_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+        <ViewStub
+            android:id="@+id/viewStubSat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            app:layout_constraintEnd_toEndOf="@+id/tv_sat_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_sat_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+        <ViewStub
+            android:id="@+id/viewStubSun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout="@layout/travel_plan_dot"
+            app:layout_constraintEnd_toEndOf="@+id/tv_sun_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tv_sun_calendar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mon_calendar" />
+
+
+        <TextView
+            android:id="@+id/tv_notice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:gravity="center"
+            android:text="@string/travel_notice"
+            android:textColor="@color/text_grey"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintEnd_toEndOf="@+id/cardView_plan"
+            app:layout_constraintStart_toStartOf="@+id/cardView_plan"
+            app:layout_constraintTop_toBottomOf="@+id/cardView_plan" />
+
+        <Button
+            android:id="@+id/btnConnectTravel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="点击连接"
+            android:textColor="@color/text_grey"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintEnd_toEndOf="@+id/cardView_plan"
+            app:layout_constraintTop_toTopOf="@+id/tv_notice"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notice"
+            android:visibility="gone"/>
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimation"
+            android:layout_width="@dimen/dp_204"
+            android:layout_height="@dimen/dp_173"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/data"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="@dimen/dp_302"
+            android:layout_height="@dimen/dp_65"
+            android:layout_marginBottom="@dimen/dp_28"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="center_vertical"
+            android:text="TextView"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_33"
+            android:includeFontPadding="false"
+            android:padding="2dp"
+            android:text="@string/travel_today"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notice" />
+
+        <ImageView
+            android:id="@+id/img_travel"
+            android:layout_width="@dimen/dp_160"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_10"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_bac_travel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:includeFontPadding="false"
+            android:padding="@dimen/dp_2"
+            android:text="@string/frequency_week"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="@+id/img_frequency"
+            app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_42"
+            android:layout_marginEnd="@dimen/sp_12"
+            android:gravity="bottom"
+            android:text="@string/meter"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/img_travel"
+            app:layout_constraintEnd_toEndOf="@+id/img_travel"
+            tools:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/tvKiloMeter"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:gravity="bottom"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_36"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/textView5" />
+
+        <ImageView
+            android:id="@+id/img_frequency"
+            android:layout_width="@dimen/dp_160"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_10"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_bac_freq"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_42"
+            android:layout_marginEnd="@dimen/sp_12"
+            android:text="@string/times"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/img_frequency"
+            app:layout_constraintEnd_toEndOf="@+id/img_frequency" />
+
+        <TextView
+            android:id="@+id/tvFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_36"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
+            app:layout_constraintEnd_toStartOf="@+id/textView7" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

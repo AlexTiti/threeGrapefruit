@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.findtech.threePomelos.mydevices.activity.VoiceTypeActivity"
+   >
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_layout_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivFirst"
+        android:layout_width="@dimen/dp_15"
+        android:layout_height="@dimen/dp_15"
+        android:layout_marginStart="@dimen/dp_19"
+        android:layout_marginTop="@dimen/dp_15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:srcCompat="@drawable/icon_select_detail" />
+
+    <TextView
+        android:id="@+id/tvFirst"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:text="AAAA"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintBottom_toBottomOf="@+id/ivFirst"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivFirst"
+        app:layout_constraintTop_toTopOf="@+id/ivFirst" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/dp_15"
+        android:layout_height="@dimen/dp_15"
+        android:layout_marginStart="@dimen/dp_19"
+        android:layout_marginTop="@dimen/dp_24"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivFirst"
+        app:srcCompat="@drawable/icon_select_detail" />
+
+    <TextView
+        android:id="@+id/textViewSecond"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:text="BBBB"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageViewThird"
+        android:layout_width="@dimen/dp_15"
+        android:layout_height="@dimen/dp_15"
+        android:layout_marginStart="@dimen/dp_19"
+        android:layout_marginTop="@dimen/dp_24"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/icon_select_detail" />
+
+    <TextView
+        android:id="@+id/textViewThird"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:text="CCCC"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewThird"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewThird"
+        app:layout_constraintTop_toTopOf="@+id/imageViewThird" />
+
+    <ImageView
+        android:id="@+id/imageViewFour"
+        android:layout_width="@dimen/dp_15"
+        android:layout_height="@dimen/dp_15"
+        android:layout_marginStart="@dimen/dp_19"
+        android:layout_marginTop="@dimen/dp_24"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewThird"
+        app:srcCompat="@drawable/icon_select_detail" />
+
+    <TextView
+        android:id="@+id/textViewFour"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:text="DDDD"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewFour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewFour"
+        app:layout_constraintTop_toTopOf="@+id/imageViewFour" />
+
+    <include
+        layout="@layout/diversion_deatil"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFour" />
+
+
+</android.support.constraint.ConstraintLayout>

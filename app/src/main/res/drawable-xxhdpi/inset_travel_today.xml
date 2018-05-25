@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/travel_selected"
+    android:insetTop="@dimen/dp_8"
+    android:insetBottom="@dimen/dp_8"
+    android:insetLeft="@dimen/dp_8"
+    android:insetRight="@dimen/dp_8">
+
+</inset>

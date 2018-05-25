@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.findtech.threePomelos.travel.view.TravelView
+        android:id="@+id/travelView"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
+        android:layout_marginStart="8dp"
+        app:circleCenterX="@dimen/dp_50"
+        app:circleCenterY="@dimen/dp_6"
+        app:circleRadius="@dimen/dp_5"
+        app:circleStroke="@dimen/dp_3"
+        app:dashWith="@dimen/dp_3"
+        app:heightSize="@dimen/dp_87"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineColor="@color/text_travel"
+        app:lineWith="@dimen/dp_3"
+        app:paintWidth="@dimen/dp_2" />
+
+    <TextView
+        android:id="@+id/tv_time_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_5"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintStart_toEndOf="@+id/travelView"
+        app:layout_constraintTop_toTopOf="@+id/travelView" />
+
+
+    <TextView
+        android:id="@+id/tv_kilometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:textColor="@color/text_travel"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintStart_toStartOf="@+id/tv_time_begin"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_begin" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_2"
+        android:layout_marginStart="8dp"
+        android:background="@color/text_black"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_time_begin"
+        app:layout_constraintStart_toEndOf="@+id/tv_time_begin"
+        app:layout_constraintTop_toTopOf="@+id/tv_time_begin" />
+
+    <TextView
+        android:id="@+id/tv_calorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_23"
+
+        android:textColor="@color/text_travel"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_kilometer"
+        app:layout_constraintStart_toEndOf="@+id/tv_kilometer"
+        app:layout_constraintTop_toTopOf="@+id/tv_kilometer" />
+
+    <TextView
+        android:id="@+id/tv_time_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintBottom_toBottomOf="@+id/textView18"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toTopOf="@+id/textView18" />
+
+    <TextView
+        android:id="@+id/tv_bac_line"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_2"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/diver_travel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_kilometer"
+        app:layout_constraintTop_toBottomOf="@+id/tv_kilometer" />
+</android.support.constraint.ConstraintLayout>

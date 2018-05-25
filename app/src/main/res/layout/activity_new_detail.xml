@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_detail_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_370"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fitsSystemWindows="true"
+            app:layout_constraintTop_toTopOf="parent">
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_layout_white"
+             />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/weight_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_100"
+            android:fontFamily="sans-serif-Regular"
+            android:text="68"
+            android:textColor="@color/text_black_color"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_edit_detail"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_below="@+id/weight_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_4"
+            android:src="@drawable/icon_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weight_parent" />
+
+        <ImageView
+            android:id="@+id/ivFire"
+            android:layout_width="@dimen/dp_23"
+            android:layout_height="@dimen/dp_23"
+            android:layout_marginTop="@dimen/dp_180"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_kaluli"
+            app:layout_constraintRight_toLeftOf="@+id/guideline7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivFly"
+            android:layout_width="@dimen/dp_23"
+            android:layout_height="@dimen/dp_23"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_licheng"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFire"
+            app:layout_constraintLeft_toRightOf="@+id/guideline7"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivFire" />
+
+        <TextView
+            android:id="@+id/tvKcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_2"
+            android:text="@string/kcal"
+            android:textColor="@color/midle_text"
+            android:textSize="@dimen/sp_10"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFire"
+            app:layout_constraintRight_toRightOf="@+id/ivFire"
+            app:layout_constraintTop_toBottomOf="@+id/ivFire" />
+
+
+        <TextView
+            android:id="@+id/tvToday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/kcal_today"
+            android:textColor="@color/text_grey"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFire"
+            app:layout_constraintRight_toRightOf="@+id/ivFire"
+            app:layout_constraintTop_toBottomOf="@+id/tvKcal" />
+
+        <TextView
+            android:id="@+id/text_today_calor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="@color/text_pink"
+            android:textSize="@dimen/sp_22"
+            app:layout_constraintTop_toBottomOf="@+id/tvToday"
+            app:layout_constraintStart_toStartOf="@+id/tvToday"
+            app:layout_constraintEnd_toEndOf="@+id/tvToday"
+            />
+
+        <TextView
+            android:id="@+id/tvTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/kcal_total"
+            android:textColor="@color/text_grey"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFire"
+            app:layout_constraintRight_toRightOf="@+id/ivFire"
+            app:layout_constraintTop_toBottomOf="@+id/text_today_calor" />
+
+        <TextView
+            android:id="@+id/total_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/x14"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFire"
+            app:layout_constraintRight_toRightOf="@+id/ivFire"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_2"
+            android:text="@string/milleage_info_text"
+            android:textColor="@color/midle_text"
+            android:textSize="@dimen/sp_10"
+            app:layout_constraintBottom_toBottomOf="@+id/tvKcal"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFly"
+            app:layout_constraintRight_toRightOf="@+id/ivFly"
+            app:layout_constraintTop_toTopOf="@+id/tvKcal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/km_today"
+            android:textColor="@color/text_grey"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintBottom_toBottomOf="@+id/tvToday"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFly"
+            app:layout_constraintRight_toRightOf="@+id/ivFly"
+            app:layout_constraintTop_toTopOf="@+id/tvToday" />
+
+        <TextView
+            android:id="@+id/text_today_mileage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="@color/text_pink"
+            android:textSize="@dimen/sp_22"
+            app:layout_constraintBottom_toBottomOf="@+id/text_today_calor"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFly"
+            app:layout_constraintRight_toRightOf="@+id/ivFly"
+            app:layout_constraintTop_toTopOf="@+id/text_today_calor" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/km_total"
+            android:textColor="@color/text_grey"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTotal"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFly"
+            app:layout_constraintRight_toRightOf="@+id/ivFly"
+            app:layout_constraintTop_toTopOf="@+id/tvTotal" />
+
+        <TextView
+            android:id="@+id/text_total_mileage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintBottom_toBottomOf="@+id/total_calories"
+            app:layout_constraintLeft_toLeftOf="@+id/ivFly"
+            app:layout_constraintRight_toRightOf="@+id/ivFly"
+            app:layout_constraintTop_toTopOf="@+id/total_calories" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/dp_60"
+            android:background="@color/text_pink"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_detail_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvToday"></View>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="@string/electric"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_19"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_detail_bg" />
+
+        <com.findtech.threePomelos.view.RoundView
+            android:id="@+id/roundViewBreak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_18"
+            app:colorRound="@color/text_travel"
+            app:layout_constraintEnd_toStartOf="@+id/roundView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:radiusRound="50dp"
+            app:strokeWidthRound="@dimen/dp_10"
+            app:textSizeRound="@dimen/sp_18" />
+
+        <com.findtech.threePomelos.view.RoundView
+            android:id="@+id/roundView"
+            android:layout_width="99dp"
+            android:layout_height="wrap_content"
+            app:colorRound="@color/text_travel"
+            app:layout_constraintBottom_toBottomOf="@+id/roundViewBreak"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/roundViewBreak"
+            app:layout_constraintTop_toTopOf="@+id/roundViewBreak"
+            app:radiusRound="50dp"
+            app:strokeWidthRound="@dimen/dp_10"
+            app:textSizeRound="@dimen/sp_18" />
+
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_30"
+            android:text="刹车组电量"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roundViewBreak" />
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手把组电量"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintBottom_toBottomOf="@+id/textView30"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toTopOf="@+id/textView30" />
+
+        <include
+            android:id="@+id/textView32"
+            layout="@layout/diversion_deatil"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView30" />
+
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_26"
+            android:text="刹车"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_19"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+        <TextView
+            android:id="@+id/tvBrake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="电子刹车"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView33">
+
+        </TextView>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_close"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:checked="false"
+            android:textOff="@string/text_off"
+            android:enabled="false"
+            android:textOn="@string/text_on"
+            android:thumb="@drawable/seek_button_close"
+            app:layout_constraintBottom_toBottomOf="@+id/tvBrake"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvBrake"
+            app:switchMinWidth="@dimen/dp_32"
+            app:switchTextAppearance="@style/textStytle_SwitchCompat"
+            app:theme="@style/MySwitch" />
+
+        <ImageView
+            android:id="@+id/ivAutoBrake"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_19"
+            android:scaleType="fitCenter"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAutoBrakeHint"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvAutoBrake"
+            app:srcCompat="@drawable/icon_select_detail" />
+
+        <TextView
+            android:id="@+id/tvAutoBrake"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_14"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="自动刹车模式"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAutoBrake"
+            app:layout_constraintTop_toBottomOf="@+id/tvAIBrakeHint" />
+
+        <TextView
+            android:id="@+id/tvAutoBrakeHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="@dimen/dp_6"
+            android:text="双手离开把手后自动刹车"
+            android:textColor="@color/hint_text"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvAutoBrake"
+            app:layout_constraintTop_toBottomOf="@+id/tvAutoBrake" />
+
+
+
+
+        <ImageView
+            android:id="@+id/ivAiBrake"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_19"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAIBrakeHint"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvAIBrake"
+            app:srcCompat="@drawable/icon_select_detail" />
+
+        <TextView
+            android:id="@+id/tvAIBrake"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_14"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="智能刹车模式(推荐)"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAutoBrake"
+            app:layout_constraintTop_toBottomOf="@+id/tvBrake" />
+
+        <TextView
+            android:id="@+id/tvAIBrakeHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="@dimen/dp_6"
+            android:text="自动检测车身状态智能刹车"
+            android:textColor="@color/hint_text"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvAIBrake"
+            app:layout_constraintTop_toBottomOf="@+id/tvAIBrake" />
+
+        <include
+            android:id="@+id/includeDetail"
+            layout="@layout/diversion_deatil"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAutoBrakeHint" />
+
+        <TextView
+            android:id="@+id/tvSafe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_26"
+            android:text="安全"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_19"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAutoBrakeHint" />
+
+        <TextView
+            android:id="@+id/tvSafeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="一键防盗"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSafe">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvSafeHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_6"
+            android:text="开启后推车将被锁住"
+            android:textColor="@color/hint_text"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintStart_toStartOf="@+id/tvSafeTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvSafeTitle" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchSafe"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:checked="false"
+            android:textOff="@string/text_off"
+            android:textOn="@string/text_on"
+            android:enabled="false"
+            android:thumb="@drawable/seek_button_close"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSafeHint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvSafeTitle"
+            app:switchMinWidth="@dimen/dp_32"
+            app:switchTextAppearance="@style/textStytle_SwitchCompat"
+            app:theme="@style/MySwitch" />
+
+
+        <include
+            android:id="@+id/includeSafe"
+            layout="@layout/diversion_deatil"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSafeHint" />
+
+
+        <TextView
+            android:id="@+id/tvVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_26"
+            android:text="安全"
+
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_19"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/includeSafe" />
+
+        <TextView
+            android:id="@+id/tvVoticeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="提示音音量"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVoice"></TextView>
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_34"
+            android:max="100"
+            android:maxHeight="@dimen/dp_5"
+            android:minHeight="@dimen/dp_5"
+            android:progress="50"
+           android:progressDrawable="@drawable/seekbar_new"
+            android:thumb="@drawable/play_plybar_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVoticeTitle" />
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_34"
+            android:text="提示音语种"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+        <TextView
+            android:id="@+id/tvLanguangeType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_19"
+            android:text="中文"
+            app:layout_constraintBottom_toBottomOf="@+id/textView36"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView36" />
+
+        <TextView
+            android:id="@+id/tvVoiceClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="刹车提示音"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView36">
+
+        </TextView>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchVoiceClose"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/dp_19"
+            android:checked="false"
+            android:textOff="@string/text_off"
+            android:textOn="@string/text_on"
+            android:enabled="false"
+            android:thumb="@drawable/seek_button_close"
+            app:layout_constraintBottom_toBottomOf="@+id/tvVoiceClose"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvVoiceClose"
+            app:switchMinWidth="@dimen/dp_32"
+            app:switchTextAppearance="@style/textStytle_SwitchCompat"
+            app:theme="@style/MySwitch" />
+
+        <TextView
+            android:id="@+id/tvVoiceTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_34"
+            android:text="刹车提示音铃声"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVoiceClose" />
+
+        <TextView
+            android:id="@+id/tvVoiceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_19"
+            android:text="人声"
+            app:layout_constraintBottom_toBottomOf="@+id/tvVoiceTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvVoiceTitle" />
+
+        <include
+            android:id="@+id/includeVoice"
+            layout="@layout/diversion_deatil"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVoiceTitle" />
+
+        <TextView
+            android:id="@+id/tvMoreAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_26"
+            android:text="更多操作"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_19"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/includeVoice" />
+
+        <TextView
+            android:id="@+id/tvRepair"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="一键修复"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="@+id/imageView11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMoreAction">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            android:src="@drawable/more_action"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRepair"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvRepair" />
+
+        <TextView
+            android:id="@+id/tvChangeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="@string/name_change"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="@+id/tvDeviceName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRepair">
+
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvDeviceName"
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            app:layout_constraintBottom_toBottomOf="@+id/tvChangeName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvChangeName" />
+
+        <TextView
+            android:id="@+id/tvVersionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="@string/code_system"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="@+id/tvVersion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvChangeName">
+
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvCodeSystem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/tvVersionTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tvVersionTitle"
+            app:layout_constraintEnd_toEndOf="@+id/tvVersion"/>
+
+        <TextView
+            android:id="@+id/tvVersion"
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            app:layout_constraintBottom_toBottomOf="@+id/tvVersionTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvVersionTitle" />
+
+        <TextView
+            android:id="@+id/tvUse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="使用说明"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="@+id/ivUse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVersionTitle">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/ivUse"
+            android:layout_width="@dimen/dp_7"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_19"
+            android:src="@drawable/more_action"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvUse" />
+
+        <TextView
+            android:id="@+id/tvUnbind"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/dp_19"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="解除绑定"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="@+id/ivUse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUse">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/ivCloseDevice"
+            android:layout_width="@dimen/dp_64"
+            android:layout_height="@dimen/dp_64"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="@dimen/dp_30"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_bac_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUnbind" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关机"
+            android:textColor="@color/grey_color"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/dp_32"
+            app:layout_constraintTop_toBottomOf="@+id/ivCloseDevice" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v4.widget.NestedScrollView>
