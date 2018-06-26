@@ -1,48 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <ImageView
         android:id="@+id/layout_bac_repair"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y254"
+        android:layout_height="0dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/text_pink">
+        android:background="@color/text_travel"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </ImageView>
 
-    </RelativeLayout>
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_layout_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/btn_update"
-        android:layout_width="@dimen/x155"
-        android:layout_height="@dimen/y45"
-        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_60"
         android:layout_below="@+id/layout_bac_repair"
-        android:layout_marginTop="@dimen/y60"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/dp_60"
         android:background="@drawable/btn_repair_back"
         android:src="?android:attr/selectableItemBackground"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
     <TextView
         android:id="@+id/text_state_repair"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/up_date"
         android:layout_alignTop="@+id/btn_update"
-        android:layout_marginTop="@dimen/y11"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size"
+        android:layout_marginBottom="@dimen/dp_10"
         android:focusable="false"
-        />
+        android:text="@string/up_date"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_update"
+        app:layout_constraintEnd_toEndOf="@+id/btn_update"
+        app:layout_constraintStart_toStartOf="@+id/btn_update"
+        app:layout_constraintTop_toTopOf="@+id/btn_update" />
 
     <ImageView
-        android:layout_width="@dimen/x204"
-        android:layout_height="@dimen/y206"
+        android:id="@+id/imageView9"
+        android:layout_width="@dimen/dp_250"
+        android:layout_height="@dimen/dp_220"
         android:layout_above="@+id/btn_update"
         android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/dp_100"
         android:scaleType="fitCenter"
-        android:src="@drawable/update" />
+        android:src="@drawable/update"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

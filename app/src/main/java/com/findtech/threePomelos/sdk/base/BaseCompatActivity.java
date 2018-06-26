@@ -1,10 +1,11 @@
 package com.findtech.threePomelos.sdk.base;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,33 +22,37 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.findtech.threePomelos.MediaAidlInterface;
 import com.findtech.threePomelos.R;
-import com.findtech.threePomelos.bluetooth.BLEDevice;
 import com.findtech.threePomelos.bluetooth.BlueManager;
 import com.findtech.threePomelos.bluetooth.CubicBLEDevice;
 import com.findtech.threePomelos.bluetooth.server.RFStarBLEService;
-import com.findtech.threePomelos.bluetooth.server.ReceiveWeightShowDialogService;
-import com.findtech.threePomelos.entity.TravelInfoEntity;
+import com.findtech.threePomelos.database.OperateDBUtils;
+import com.findtech.threePomelos.home.MainActivity;
 import com.findtech.threePomelos.music.activity.PlayDetailActivity;
 import com.findtech.threePomelos.music.info.MusicInfo;
 import com.findtech.threePomelos.music.utils.HandlerUtil;
@@ -59,23 +64,20 @@ import com.findtech.threePomelos.musicserver.control.MusicPlayer;
 import com.findtech.threePomelos.musicserver.control.MusicStateListener;
 import com.findtech.threePomelos.musicserver.server.FloatingService;
 import com.findtech.threePomelos.musicserver.server.WatcherHome;
-import com.findtech.threePomelos.mydevices.activity.NewAutoDetailActivity;
 import com.findtech.threePomelos.net.NetWorkRequest;
+import com.findtech.threePomelos.sdk.AppUtils;
 import com.findtech.threePomelos.sdk.MyApplication;
 import com.findtech.threePomelos.sdk.manger.AppManager;
-import com.findtech.threePomelos.sdk.AppUtils;
 import com.findtech.threePomelos.sdk.manger.RxHelper;
+import com.findtech.threePomelos.travel.bean.TravelOnceBean;
 import com.findtech.threePomelos.utils.IContent;
-import com.findtech.threePomelos.utils.MyCalendar;
 import com.findtech.threePomelos.utils.NetUtils;
 import com.findtech.threePomelos.utils.RequestUtils;
 import com.findtech.threePomelos.utils.StatusBarUtils;
 import com.findtech.threePomelos.utils.ToastUtil;
 import com.findtech.threePomelos.utils.Tools;
-import com.findtech.threePomelos.view.calendar.CalendarDay;
 import com.findtech.threePomelos.view.dialog.CustomDialog;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -83,14 +85,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import me.yokeyword.fragmentation.SupportActivity;
 
 import static com.findtech.threePomelos.musicserver.control.MusicPlayer.mService;
@@ -105,32 +110,34 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
 
     protected Context mContext;
     protected boolean isTransAnim;
+    private Unbinder mUnbinder;
+    private boolean isSend = false;
 
     static {
         //5.0以下兼容vector
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    /**
-     * 网络异常View
-     */
-    protected View errorView;
-    /**
-     * loadingView
-     */
-    protected View loadingView;
-    /**
-     * 没有内容view
-     */
-    protected View emptyView;
+    // /**
+//     * 网络异常View
+//     */
+//    protected View errorView;
+//    /**
+//     * loadingView
+//     */
+//    protected View loadingView;
+//    /**
+//     * 没有内容view
+//     */
+//    protected View emptyView;
     protected static MyApplication app = null;
+    // 用于关闭Service
     private MusicPlayer.ServiceToken mToken;
     /**
      * receiver 接受播放状态变化等
      */
     private PlaybackStatus mPlaybackStatus;
     private ArrayList<MusicStateListener> mMusicListener = new ArrayList<>();
-    private ProgressDialog progressDialog;
     private static int activityNumber = 0;
     public Intent intent;
     WatcherHome mHomeWatcher;
@@ -152,106 +159,170 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
     Handler myHandler;
     private IContent content = IContent.getInstacne();
     private String nameBluetooth;
-
     BluetoothBroadcast bluetoothBroadcast;
     public String bluetoothAddress;
 
+    Dialog dialog;
+    private Disposable disposable;
+
+
     /**
      * 进度提示框
      *
      * @param message 提示的信息
      * @param notice  超时的提示信息
      */
-    public void showProgressDialog(String message, final String notice) {
-        this.noTimeNotice = notice;
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage(message);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+    public void showProgressBar(String message,final String notice , int time) {
+        createDialog(message);
+        dialog.show();
 
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                    if (!TextUtils.isEmpty(noTimeNotice)) {
-                        ToastUtil.showToast(BaseCompatActivity.this, noTimeNotice);
+        disposable = Observable.timer(time, TimeUnit.SECONDS)
+                .compose(RxHelper.<Long>rxSchedulerHelper())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                            dialog = null;
+                            if (!TextUtils.isEmpty(notice)) {
+                                ToastUtil.showToast(BaseCompatActivity.this, notice);
+                            }
+                        }
                     }
-                }
+                });
+    }
+
+    private void createDialog(String message) {
+        LinearLayout view = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.progress, null);
+        TextView textView = view.findViewById(R.id.tvMessage);
+        textView.setText(message);
+        dialog = new Dialog(this, R.style.MyDialogStyleBottom);
+        dialog.setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
-        }, 10000);
+        });
+        DisplayMetrics dm = new DisplayMetrics();
+        final Window dialogWindow = dialog.getWindow();
+        WindowManager m = dialogWindow.getWindowManager();
+        m.getDefaultDisplay().getMetrics(dm);
+        WindowManager.LayoutParams p = dialogWindow.getAttributes();
+        p.width = dm.widthPixels;
+        p.alpha = 1.0f;
+        p.dimAmount = 0.6f;
+        p.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(p);
     }
 
     /**
      * 进度提示框
      *
      * @param message 提示的信息
-     * @param time    时间
      * @param notice  超时的提示信息
      */
-    public void showProgressDialog(String message, final long time, final String notice) {
-        this.hasTimeNotice = notice;
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage(message);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                    if (!TextUtils.isEmpty(hasTimeNotice)) {
-                        ToastUtil.showToast(BaseCompatActivity.this, hasTimeNotice);
+    public void showProgressBar(String message, int time, final String notice, final boolean disMiss) {
+        createDialog(message);
+        dialog.show();
+
+        disposable = Observable.timer(time, TimeUnit.SECONDS)
+                .compose(RxHelper.<Long>rxSchedulerHelper())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                            dialog = null;
+                            if (!TextUtils.isEmpty(notice)) {
+                                ToastUtil.showToast(BaseCompatActivity.this, notice);
+                            }
+                        }
+                        if (disMiss) {
+                            if (app.manager.cubicBLEDevice != null) {
+                                app.manager.cubicBLEDevice.disconnectedDevice();
+                            }
+                        }
                     }
-                }
-            }
-        }, time);
+                });
     }
 
-    /**
-     * 进度提示框
-     *
-     * @param message
-     * @param time
-     * @param notice
-     */
-    public void showProgressDialogDis(String message, final long time, final String notice) {
-        this.hasTimeNotice = notice;
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage(message);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                    if (!TextUtils.isEmpty(hasTimeNotice)) {
-                        ToastUtil.showToast(BaseCompatActivity.this, hasTimeNotice);
-                    }
-                    if (app.manager.cubicBLEDevice != null) {
-                        app.manager.cubicBLEDevice.disconnectedDevice();
-                    }
-                }
-            }
-        }, time);
-    }
+
+//    /**
+//     * 进度提示框
+//     *
+//     * @param message 提示的信息
+//     * @param time    时间
+//     * @param notice  超时的提示信息
+//     */
+//    public void showProgressDialog(String message, final long time, final String notice) {
+//        this.hasTimeNotice = notice;
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setMessage(message);
+//        progressDialog.setIndeterminate(false);
+//        progressDialog.setCancelable(true);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
+//        myHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (progressDialog.isShowing()) {
+//                    progressDialog.dismiss();
+//                    if (!TextUtils.isEmpty(hasTimeNotice)) {
+//                        ToastUtil.showToast(BaseCompatActivity.this, hasTimeNotice);
+//                    }
+//                }
+//            }
+//        }, time);
+//    }
+
+//    /**
+//     * 进度提示框
+//     *
+//     * @param message
+//     * @param time
+//     * @param notice
+//     */
+//    public void showProgressDialogDis(String message, final long time, final String notice) {
+//        this.hasTimeNotice = notice;
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setMessage(message);
+//        progressDialog.setIndeterminate(false);
+//        progressDialog.setCancelable(true);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
+//        myHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (progressDialog.isShowing()) {
+//                    progressDialog.dismiss();
+//                    if (!TextUtils.isEmpty(hasTimeNotice)) {
+//                        ToastUtil.showToast(BaseCompatActivity.this, hasTimeNotice);
+//                    }
+//                    if (app.manager.cubicBLEDevice != null) {
+//                        app.manager.cubicBLEDevice.disconnectedDevice();
+//                    }
+//                }
+//            }
+//        }, time);
+//    }
+
 
     /**
      * 取消提示框
      */
     public void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
+
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            dialog = null;
+
+        }
+        if (disposable != null) {
+            disposable.dispose();
         }
     }
 
@@ -388,7 +459,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
             app.manager.bluetoothDevice = bleAdapter.getRemoteDevice(selectAddress);
             app.manager.isEnabled(this);
             app.manager.cubicBLEDevice = new CubicBLEDevice(
-                    BaseCompatActivity.this, app.manager.bluetoothDevice);
+                    getApplicationContext(), app.manager.bluetoothDevice);
         }
     }
 
@@ -422,6 +493,15 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
             public void RFstarBLEManageStopScan() {
 
             }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void scanBluetoothListener(int callbackType, ScanResult result) {
+                if (result.getDevice() != null && result.getDevice().getAddress().equals(selectAddress)) {
+                    connectBluetooth(selectAddress, nameBluetooth);
+                    app.manager.stopScanBluetoothDevice();
+                }
+            }
         });
 
 
@@ -434,28 +514,41 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
         }
     }
 
+
     /**
      * 发送时间指令
      */
-    private void sendSetTime() {
+    public void sendSetTime() {
         byte[] bb = Tools.getDateTimeSplitCurrent();
         byte[] bytess = {0x55, (byte) 0xAA, 0x07, 0x0B, 0x0A, bb[0], bb[1], bb[2], bb[3], bb[4], bb[5], bb[6],
                 (byte) (0 - (0x07 + 0x0B + 0x0A + bb[0] + bb[1] + bb[2] + bb[3] + bb[4] + bb[5] + bb[6]))};
         sendBlueToothByte(bytess);
     }
 
-    public void updateAndSend() {
-        Observable.timer(2, TimeUnit.SECONDS)
+//    public void updateAndSend() {
+//        Observable.timer(2, TimeUnit.SECONDS)
+//                .compose(RxHelper.<Long>rxSchedulerHelper())
+//                .subscribe(new Consumer<Long>() {
+//                    @Override
+//                    public void accept(Long aLong) throws Exception {
+//                        sendSetTime();
+//                    }
+//                });
+//    }
+
+    public void sendNotify() {
+        Observable.timer(1000, TimeUnit.MILLISECONDS)
                 .compose(RxHelper.<Long>rxSchedulerHelper())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        sendSetTime();
+                        sendBlueToothByte(IContent.NOTIFY_DATA);
                     }
                 });
     }
 
     public void observableSend() {
+
         Observable.create(new ObservableOnSubscribe<Date>() {
             @Override
             public void subscribe(final ObservableEmitter<Date> e) throws Exception {
@@ -467,7 +560,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
                                 AVObject avObject = list.get(0);
                                 e.onNext(avObject.getDate("endTime"));
                             } else {
-                                e.onError(null);
+                                e.onError(exception);
                             }
                         } else {
                             e.onError(exception);
@@ -494,6 +587,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
                 });
 
     }
+
 
     @Override
     public void onServiceConnected(final ComponentName name, final IBinder service) {
@@ -592,6 +686,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        dismissProgressDialog();
         unbindService();
         try {
             unregisterReceiver(mPlaybackStatus);
@@ -605,7 +700,14 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
         mPlayHandler = null;
         mMusicListener.clear();
 
+        if (mUnbinder != null) {
+            mUnbinder.unbind();
+        }
+        if (app.manager != null) {
+            app.manager.clearListenering();
+        }
         AppManager.getAppManager().finishActivity(this);
+
 
     }
 
@@ -636,7 +738,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final String action = intent.getAction();
-            if (action == null){
+            if (action == null) {
                 return;
             }
             BaseCompatActivity baseActivity = mReference.get();
@@ -679,19 +781,19 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
 
     private void init(Bundle savedInstanceState) {
         setContentView(getLayoutId());
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         StatusBarUtils.setTransparent(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        errorView = inflater.inflate(R.layout.view_network_error, null);
-        loadingView = inflater.inflate(R.layout.view_loading, null);
-        emptyView = inflater.inflate(R.layout.view_empty, null);
-        errorView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onErrorViewClick(v);
-            }
-        });
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//        errorView = inflater.inflate(R.layout.view_network_error, null);
+//        loadingView = inflater.inflate(R.layout.view_loading, null);
+//        emptyView = inflater.inflate(R.layout.view_empty, null);
+//        errorView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onErrorViewClick(v);
+//            }
+//        });
         AppManager.getAppManager().addActivity(this);
         myHandler = HandlerUtil.getInstance(this);
         initData();
@@ -736,6 +838,11 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
      * @param intent
      */
     public void dataAvailableRead(Intent intent) {
+//        final byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
+//        if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0A){
+//            sendBlueToothByte(IContent.NOTIFY_DATA);
+//        }
+
     }
 
     /**
@@ -745,95 +852,162 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
      */
     public void dataAvailable(Intent intent) {
 
-        byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
+        final byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
+
         if (data[3] == (byte) 0x8B && data[4] == (byte) 0x10) {
 
-            double distance = (data[14] << 8) + (data[15] & 0xff);
-            double travelTime = (data[16] << 8) + (data[17] & 0xff);
-
-            int date = data[6] & 0xff;
-            long b = (data[7] & 0xff) << 16;
-            long c = (data[8] & 0xff) << 8;
-            long d = data[9] & 0xff;
-
-            long a = 0;
-            Date startTime = null;
-            Date endTime = null;
-
-            Date dateBase = new Date(80, 0, 2, 0, 0, 0);
-            Calendar calendarStart = Calendar.getInstance();
-            if (date <= 127) {
-                a = date << 24;
-                long total = a + b + c + d;
-                calendarStart.setTimeInMillis(dateBase.getTime() + total * 1000);
-            } else {
-                a = (date - 127) << 24;
-                long tem = 127 << 24;
-                BigInteger integer = BigInteger.valueOf(a);
-                BigInteger total = integer.add(BigInteger.valueOf(tem))
-                        .add(BigInteger.valueOf(b))
-                        .add(BigInteger.valueOf(c))
-                        .add(BigInteger.valueOf(d));
-                calendarStart.setTimeInMillis(dateBase.getTime() + total.longValue() * 1000);
-
-            }
-
-            startTime = Tools.getCurrentDateSecond(calendarStart.getTime());
-
-            int dateEnd = data[10] & 0xff;
-            long bEnd = (data[11] & 0xff) << 16;
-            long cEnd = (data[12] & 0xff) << 8;
-            long dEnd = data[13] & 0xff;
-
-            Calendar calendarEnd = Calendar.getInstance();
-
-            if (dateEnd <= 127) {
-                long aEnd = dateEnd << 24;
-                long totalEnd = aEnd + bEnd + cEnd + dEnd;
-                calendarEnd.setTimeInMillis(dateBase.getTime() + totalEnd * 1000);
-
-            } else {
-                long aEnd = (dateEnd - 127) << 24;
-                long tem = 127 << 24;
-                BigInteger integer = BigInteger.valueOf(aEnd);
-                BigInteger total = integer.add(BigInteger.valueOf(tem))
-                        .add(BigInteger.valueOf(bEnd))
-                        .add(BigInteger.valueOf(cEnd))
-                        .add(BigInteger.valueOf(dEnd));
-                calendarEnd.setTimeInMillis(dateBase.getTime() + total.longValue() * 1000);
-            }
-            endTime = calendarEnd.getTime();
-            L.e("data======", "timeBreak=" + startTime.toString());
-            L.e("data======", "timeBreak=" + endTime.toString());
-
-
-            NetWorkRequest.saveDataToServerWithOnce(distance, startTime, endTime, travelTime, new SaveCallback() {
+            Observable.create(new ObservableOnSubscribe<TravelOnceBean>() {
                 @Override
-                public void done(AVException e) {
+                public void subscribe(ObservableEmitter<TravelOnceBean> e) throws Exception {
+                    final int distance = (data[14] << 8) + (data[15] & 0xff);
+                    final int travelTime = (data[16] << 8) + (data[17] & 0xff);
+
+                    int date = data[6] & 0xff;
+                    long b = (data[7] & 0xff) << 16;
+                    long c = (data[8] & 0xff) << 8;
+                    long d = data[9] & 0xff;
+
+                    long a;
+                    Date startTime;
+                    Date endTime;
+
+                    Date dateBase = new Date(80, 0, 2, 0, 0, 0);
+                    Calendar calendarStart = Calendar.getInstance();
+                    if (date <= 127) {
+                        a = date << 24;
+                        long total = a + b + c + d;
+                        calendarStart.setTimeInMillis(dateBase.getTime() + total * 1000);
+                    } else {
+                        a = (date - 127) << 24;
+                        long tem = 127 << 24;
+                        BigInteger integer = BigInteger.valueOf(a);
+                        BigInteger total = integer.add(BigInteger.valueOf(tem))
+                                .add(BigInteger.valueOf(b))
+                                .add(BigInteger.valueOf(c))
+                                .add(BigInteger.valueOf(d));
+                        calendarStart.setTimeInMillis(dateBase.getTime() + total.longValue() * 1000);
+
+                    }
+                    startTime = Tools.getCurrentDateSecond(calendarStart.getTime());
+                    int dateEnd = data[10] & 0xff;
+                    long bEnd = (data[11] & 0xff) << 16;
+                    long cEnd = (data[12] & 0xff) << 8;
+                    long dEnd = data[13] & 0xff;
+
+                    Calendar calendarEnd = Calendar.getInstance();
+                    if (dateEnd <= 127) {
+                        long aEnd = dateEnd << 24;
+                        long totalEnd = aEnd + bEnd + cEnd + dEnd;
+                        calendarEnd.setTimeInMillis(dateBase.getTime() + totalEnd * 1000);
+
+                    } else {
+                        long aEnd = (dateEnd - 127) << 24;
+                        long tem = 127 << 24;
+                        BigInteger integer = BigInteger.valueOf(aEnd);
+                        BigInteger total = integer.add(BigInteger.valueOf(tem))
+                                .add(BigInteger.valueOf(bEnd))
+                                .add(BigInteger.valueOf(cEnd))
+                                .add(BigInteger.valueOf(dEnd));
+                        calendarEnd.setTimeInMillis(dateBase.getTime() + total.longValue() * 1000);
+                    }
+                    endTime = calendarEnd.getTime();
+                    TravelOnceBean bean = new TravelOnceBean(startTime, endTime, travelTime, distance);
+                    e.onNext(bean);
 
                 }
-            });
+            }).flatMap(new Function<TravelOnceBean, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(final TravelOnceBean travelOnceBean) throws Exception {
 
+                    return Observable.create(new ObservableOnSubscribe<String>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<String> e) throws Exception {
+                            if (NetUtils.isConnectInternet(BaseCompatActivity.this)) {
+                                NetWorkRequest.saveDataToServerWithOnce(travelOnceBean.getMileage(), travelOnceBean.getStartTime(),
+                                        travelOnceBean.getEndTime(), travelOnceBean.getUseTime(),
+                                        Tools.getDateFromTimeStr(Tools.getTimeFromDate(travelOnceBean.getStartTime())), new SaveCallback() {
+                                            @Override
+                                            public void done(AVException e) {
+                                            }
+                                        });
+                            } else {
+                                OperateDBUtils operateDBUtils = new OperateDBUtils(BaseCompatActivity.this);
+                                operateDBUtils.insertTravelOnceToDB(OperateDBUtils.TABLE_TRAVEL_ONCE_URI, Tools.getStringTimeFromDate(travelOnceBean.getStartTime())
+                                        , Tools.getStringTimeFromDate(travelOnceBean.getEndTime()),
+                                        (int) travelOnceBean.getUseTime(), (int) travelOnceBean.getMileage(),
+                                        Tools.getTimeFromDate(travelOnceBean.getStartTime()));
+                            }
+                            e.onNext("Success");
+                        }
+                    });
+                }
+            }).compose(RxHelper.<String>rxSchedulerHelper())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+                            if (!isSend) {
+                                getNewData();
+                            }
+                            isSend = true;
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                        }
+                    });
             return;
         }
 
         if (data[3] == (byte) 0x8B && data[4] == 0x08) {
+            Observable.create(new ObservableOnSubscribe<ArrayList<Integer>>() {
+                @Override
+                public void subscribe(ObservableEmitter<ArrayList<Integer>> e) throws Exception {
+                    ArrayList<Integer> integers = new ArrayList<>();
+                    int timeBreakHundred = data[5] << 24;
+                    int timeBreakNext = data[6] << 16;
+                    int timeBreak = data[7] << 8;
+                    int timeBreakZero = data[8] & 0xff;
 
-            int timeBreakZero = data[7] & 0xff;
-            int timeBreakNext = data[6] << 8;
-            int timeBreakHundred = data[5] << 16;
+                    int autoBreakHundred = data[9] << 24;
+                    int autoBreakNext = data[10] << 16;
+                    int autoBreak = data[11] << 8;
+                    int autoBreakZero = data[12] & 0xff;
 
-            int timeCloseZero = data[11] & 0xff;
-            int timeCloseNext = data[10] << 8;
-            int timeSleepZero = data[9] & 0xff;
-            int timeSleepNext = data[8] << 8;
+                    int timeSleepZero = data[14] & 0xff;
+                    int timeSleepNext = data[13] << 8;
 
-            int timeBreak = timeBreakHundred + timeBreakNext + timeBreakZero;
-            int timeClose = timeCloseNext + timeCloseZero;
-            int timeSleep = timeSleepNext + timeSleepZero;
+                    int timeCloseZero = data[16] & 0xff;
+                    int timeCloseNext = data[15] << 8;
 
-            L.e("data======", "timeBreak=" + timeBreak + "timeClose" + timeClose + "timeSleep" + timeSleep);
+                    int aiBreakTime = timeBreakHundred + timeBreakNext + timeBreak + timeBreakZero;
+                    integers.add(aiBreakTime);
+                    int autoBreakTime = autoBreakHundred + autoBreakNext + autoBreak + autoBreakZero;
+                    integers.add(autoBreakTime);
+                    int sleepTime = timeSleepNext + timeSleepZero;
+                    integers.add(sleepTime);
+                    int closeTime = timeCloseNext + timeCloseZero;
+                    integers.add(closeTime);
 
+                    e.onNext(integers);
+                }
+            }).flatMap(new Function<ArrayList<Integer>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(ArrayList<Integer> integers) throws Exception {
+                    return NetWorkRequest.sendDeviceUseInfo(integers, IContent.getInstacne().address);
+                }
+            }).compose(RxHelper.<String>rxSchedulerHelper())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                        }
+                    });
             return;
         }
 
@@ -842,6 +1016,28 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
             disConnect(intent);
             return;
         }
+    }
+
+    private void getNewData() {
+
+        Observable.timer(3, TimeUnit.SECONDS)
+                .compose(RxHelper.<Long>rxSchedulerHelper())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+
+                        NetWorkRequest netWorkRequest = new NetWorkRequest(BaseCompatActivity.this);
+                        netWorkRequest.getTodayFrequencyMonthToDB();
+                        netWorkRequest.getTodayFrequencyWeekToDB();
+                        netWorkRequest.getTodayTravelInfoSaveToDB();
+
+//                        netWorkRequest.getTravelInfoSaveToDB();
+//                        netWorkRequest.getFrequencyMonthToDB();
+//                        netWorkRequest.getFrequencyWeekToDB();
+                        isSend = false;
+                    }
+                });
+
     }
 
     /**
@@ -861,11 +1057,11 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
     public void disConnect(Intent intent) {
         if (app.manager.cubicBLEDevice != null) {
             app.manager.cubicBLEDevice.disconnectedDevice();
-            IContent.getInstacne().address = null;
-            IContent.getInstacne().deviceName = null;
-            IContent.isSended = false;
-            app.manager.cubicBLEDevice = null;
         }
+        IContent.getInstacne().address = null;
+        IContent.getInstacne().deviceName = null;
+        IContent.isSended = false;
+        app.manager.cubicBLEDevice = null;
     }
 
 
@@ -880,6 +1076,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
 
 
     private void initMusic() {
+        //绑定音乐服务
         mToken = MusicPlayer.bindToService(this, this);
         mPlaybackStatus = new PlaybackStatus(this);
         IntentFilter f = new IntentFilter();
@@ -1019,6 +1216,24 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
         });
     }
 
+    public void initToolBarMain(View view, String title) {
+        TextView tvBarTitle = view.findViewById(R.id.tvBarName);
+        tvBarTitle.setText(title);
+        ImageView ivBack = view.findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!RequestUtils.getSharepreference(BaseCompatActivity.this).getBoolean(RequestUtils.IS_LOGIN, false)) {
+                    RequestUtils.getSharepreferenceEditor(BaseCompatActivity.this)
+                            .putBoolean(RequestUtils.IS_LOGIN, true).apply();
+                    startActivity(MainActivity.class);
+                }
+                finish();
+            }
+        });
+    }
+
+
     @Override
     public void finish() {
         super.finish();
@@ -1034,6 +1249,22 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 是否使用overridePendingTransition过度动画
+     *
+     * @return 是否使用overridePendingTransition过度动画，默认使用
+     */
+    protected boolean isTransAnim() {
+        return isTransAnim;
+    }
+
+    /**
+     * 设置是否使用overridePendingTransition过度动画
+     */
+    protected void setIsTransAnim(boolean b) {
+        isTransAnim = b;
     }
 
     /**
@@ -1093,45 +1324,9 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
         }
     }
 
-    /**
-     * 注册监听蓝牙广播
-     */
-    public void registerMusicBroadcast() {
-
-        if (app.manager.cubicBLEDevice != null) {
-            app.manager.cubicBLEDevice.setBLEBroadcastDelegate(new BLEDevice.RFStarBLEBroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent, String macData, String uuid) {
-
-                    String action = intent.getAction();
-
-                    if (musicInterface != null) {
-                        musicInterface.musicReciver(intent);
-                        return;
-                    }
-
-                    if (action.equals(RFStarBLEService.ACTION_DATA_AVAILABLE)) {
-                        byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
-                        if (data.length < 5) {
-                            return;
-                        }
-                        if (data[3] == (byte) 0x8B && data[4] == (byte) 0xAA) {
-                            Intent intent_close = new Intent(DEVICE_CLOSE_ONPAGE);
-                            sendBroadcast(intent_close);
-                            return;
-                        }
-                        doMusic(data);
-                    }
-                }
-
-                @Override
-                public void onReceiveDataAvailable(String dataType, String data, TravelInfoEntity travelInfoEntity, String time) {
-                }
-            });
-        }
-    }
 
     public void doMusic(byte[] data) {
+
         if (data[3] == (byte) 0x83 && data[4] == 0x01) {
             if (!IContent.getInstacne().SD_Mode) {
                 if (MusicPlayer.getQueueSize() != 0) {
@@ -1189,6 +1384,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
 
         @Override
         public void run() {
+
             long[] list = new long[infoArrayList.size()];
             HashMap<Long, MusicInfo> infoArray = new HashMap(infoArrayList.size());
             for (int i = 0; i < infoArrayList.size(); i++) {
@@ -1199,11 +1395,11 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
             if (position > -1) {
                 MusicPlayer.playAll(infoArray, list, position, false);
             }
+
         }
     }
 
     //-------------------------------------注册蓝牙广播
-
 
     /**
      * 监视广播的属性
@@ -1246,13 +1442,14 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
             if (action.equals(RFStarBLEService.ACTION_WRITE_DONE)) {
                 byte[] data = intent
                         .getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
-                if (IContent.getInstacne().WRITEVALUE != null) {
+                if (IContent.getInstacne().WRITEVALUE != null && app.manager.cubicBLEDevice != null) {
                     app.manager.cubicBLEDevice.readValue(IContent.SERVERUUID_BLE, IContent.READUUID_BLE, IContent.getInstacne().WRITEVALUE);
                 }
-                L.e("currentTime", Tools.byte2Hex(data));
+                L.e("currentTime WRITE_DONE", Tools.byte2Hex(data));
             }
             if (RFStarBLEService.ACTION_GATT_CONNECTED.equals(action)) {
                 IContent.getInstacne().isBind = true;
+
             } else if (RFStarBLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 IContent.getInstacne().isBind = false;
                 IContent.getInstacne().address = null;
@@ -1266,6 +1463,7 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
                 }
             } else if (RFStarBLEService.DESCRIPTOR_WRITER_DONE
                     .equals(action)) {
+
                 activity.describeDown(intent);
             } else if (RFStarBLEService.ACTION_DATA_AVAILABLE.equals(action)) {
                 byte[] data = intent
@@ -1274,25 +1472,25 @@ public abstract class BaseCompatActivity extends SupportActivity implements Serv
                 if (IContent.isBLE) {
                     if (data[3] == (byte) 0x81 && data[4] == 0x02) {
                         if (data[5] == 0x03) {
-                            ToastUtil.showToast(context, context.getString(R.string.change_bluetooth_mode));
                             IContent.getInstacne().SD_Mode = false;
                         }
                     }
+                    activity.dataAvailable(intent);
                 }
-                activity.dataAvailable(intent);
                 if (characteristicUUID.contains("ffe4") && !IContent.isBLE) {
                     if (app.manager.cubicBLEDevice != null) {
                         app.manager.cubicBLEDevice.dealWithPoemlosG(characteristicUUID, data);
                     }
                 }
+
             } else if (action.equals(RFStarBLEService.ACTION_DATA_AVAILABLE_READ)) {
                 byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
-                L.e("currentTime", Tools.byte2Hex(data));
+                L.e("currentTimeRead", Tools.byte2Hex(data));
                 activity.dataAvailableRead(intent);
             }
             activity.bluetoothReceive(intent);
-
         }
+
     }
 
     public void connect() {

@@ -32,7 +32,7 @@
             android:layout_marginTop="@dimen/dp_15"
             android:gravity="center"
             android:textColor="#a6172058"
-            android:textSize="22sp"
+            android:textSize="@dimen/sp_14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_show_detail" />
@@ -55,7 +55,7 @@
             app:layout_constraintRight_toRightOf="parent"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_show_detail"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_notice"
             app:midScaleColor="@color/scale_travel"
             app:midScaleStroke="10dp"
             app:minScale="0"

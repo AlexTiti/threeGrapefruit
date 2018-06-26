@@ -94,7 +94,7 @@ public class TravelDetailActivity extends BaseActivityMvp<TravelDetailActivity, 
 
     @Override
     public void loadFailed(String s) {
-
+        checkNetWork();
     }
 
     @Override

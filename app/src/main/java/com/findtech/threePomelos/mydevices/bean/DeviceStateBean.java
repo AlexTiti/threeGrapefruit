@@ -31,6 +31,17 @@ public class DeviceStateBean {
         return bean;
     }
 
+    private int brakeFast = 0;
+
+    public int getBrakeFast() {
+        return brakeFast;
+    }
+
+    public void setBrakeFast(int brakeFast) {
+        this.brakeFast = brakeFast;
+    }
+
+
     public int getBrakeNoticeModel() {
         return brakeNoticeModel;
     }

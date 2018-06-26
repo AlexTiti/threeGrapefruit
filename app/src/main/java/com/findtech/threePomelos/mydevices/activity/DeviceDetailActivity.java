@@ -6,8 +6,6 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,15 +45,14 @@ import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.findtech.threePomelos.R;
 import com.findtech.threePomelos.bluetooth.BLEDevice;
-import com.findtech.threePomelos.bluetooth.CubicBLEDevice;
 import com.findtech.threePomelos.bluetooth.server.RFStarBLEService;
 import com.findtech.threePomelos.database.OperateDBUtils;
 import com.findtech.threePomelos.entity.TravelInfoEntity;
-import com.findtech.threePomelos.music.utils.L;
-import com.findtech.threePomelos.mydevices.bean.DeviceCarBean;
+import com.findtech.threePomelos.mydevices.present.DeviceDetailPresent;
+import com.findtech.threePomelos.mydevices.view.NewAutoDeviceView;
 import com.findtech.threePomelos.net.NetWorkRequest;
 import com.findtech.threePomelos.sdk.MyApplication;
-import com.findtech.threePomelos.sdk.base.BaseCompatActivity;
+import com.findtech.threePomelos.sdk.base.mvp.BaseActivityMvp;
 import com.findtech.threePomelos.utils.DialogUtil;
 import com.findtech.threePomelos.utils.IContent;
 import com.findtech.threePomelos.utils.RequestUtils;
@@ -71,15 +68,15 @@ import java.util.List;
 /**
  * @author Administrator
  */
-public class DeviceDetailActivity extends BaseCompatActivity implements View.OnClickListener,
-        BLEDevice.RFStarBLEBroadcastReceiver, AdultWeightPickerDialog.OnWeightListener, DialogUtil.ConfirmClick {
+public class DeviceDetailActivity extends BaseActivityMvp<DeviceDetailActivity, DeviceDetailPresent> implements View.OnClickListener,
+        BLEDevice.RFStarBLEBroadcastReceiver, AdultWeightPickerDialog.OnWeightListener, DialogUtil.ConfirmClick
+        , NewAutoDeviceView<String> {
 
     private ImageView mImage, isnot_ble_car, isnot_ble_car_bac;
     private ImageView image_wheel_detail, iamge_bac__;
     private ImageView image_brake_detail;
-    private TextView textView_toolbar;
     private ImageView img_is_tempurature;
-    private RelativeLayout idBle_device, layout;
+    private RelativeLayout idBle_device;
     private RelativeLayout is_tempurature;
     private LinearLayout layout_ble_detail;
     private LinearLayout is_notBledevice;
@@ -109,14 +106,11 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
     private RelativeLayout layout_hhh;
     private SwitchCompat mSwitchCompat, switch_brake_close;
     private ImageView image_edit_detail;
-    private ImageView[] imageView = new ImageView[7];
-    private int[] id = {R.id.ianme01, R.id.ianme02, R.id.ianme03, R.id.ianme04, R.id.ianme05, R.id.ianme06, R.id.ianme07};
+
     private AdultWeightPickerDialog weightPickerDialog;
     private String selectAddress;
     private String selectName;
     private String deviceFunction;
-    BluetoothAdapter bleAdapter;
-    BluetoothManager manager;
     boolean isopen_Auto_brake = true;
     private RelativeLayout layout_seekbar_detail;
     private int progres;
@@ -126,6 +120,8 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
     boolean low_elec = false;
     private DialogUtil dialogUtil;
     private IContent content = IContent.getInstacne();
+    private View include;
+    private ImageView actionMore;
 
 
     /**
@@ -141,69 +137,15 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         }
     }
 
-    private void getCalor() {
-
-        NetWorkRequest.getCalorFromServer(new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    for (int i = 0; i < list.size(); i++) {
-                        AVObject avObject = list.get(i);
-                        String calories = avObject.getString("totalCaloriesValue");
-                        String adultWeight = avObject.getString("adultWeight");
-                        travelInfoEntity.setAdultWeight(adultWeight);
-                        travelInfoEntity.setTotalCalor(calories);
-                        RequestUtils.getSharepreferenceEditor(DeviceDetailActivity.this).putString(OperateDBUtils.TOTAL_CALOR,
-                                calories).commit();
-                        RequestUtils.getSharepreferenceEditor(DeviceDetailActivity.this).putString(OperateDBUtils.ADULT_WEIGHT,
-                                adultWeight).commit();
-                    }
-                    weight_parent.setText(travelInfoEntity.getAdultWeight());
-                    total_calories.setText(travelInfoEntity.getTotalCalor());
-                } else {
-                    travelInfoEntity.setAdultWeight(RequestUtils.getSharepreference(DeviceDetailActivity.this).getString(OperateDBUtils.ADULT_WEIGHT, "56"));
-                    travelInfoEntity.setTotalCalor(RequestUtils.getSharepreference(DeviceDetailActivity.this).getString(OperateDBUtils.TOTAL_CALOR, "0"));
-                    weight_parent.setText(travelInfoEntity.getAdultWeight());
-                    total_calories.setText(travelInfoEntity.getTotalCalor());
-                }
-            }
-        });
-    }
-
-    private void getTravelInfo() {
-
-        NetWorkRequest.getTravelInfo(selectAddress, new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    if (list.size() != 0) {
-                        AVObject avObject = list.get(0);
-                        travelInfoEntity.setTodayMileage(avObject.getString(OperateDBUtils.TODAY_MILEAGE));
-                        travelInfoEntity.setTotalMileage(avObject.getString(OperateDBUtils.TOTAL_MILEAGE));
-                        String todayCalorie = avObject.getString("calorieValue");
-                        travelInfoEntity.setTodayCalor(todayCalorie);
-                        RequestUtils.getSharepreferenceEditor(DeviceDetailActivity.this).putString(OperateDBUtils.TODAY_CALOR,
-                                todayCalorie).commit();
-                    }
-                } else {
-                    travelInfoEntity.setTodayCalor(RequestUtils.getSharepreference(DeviceDetailActivity.this).getString(OperateDBUtils.TODAY_CALOR, "0"));
-                }
-                text_today_mileage.setText(travelInfoEntity.getTodayMileage());
-                text_total_mileage.setText(travelInfoEntity.getTotalMileage());
-                text_today_calor.setText(travelInfoEntity.getTodayCalor());
-            }
-        });
-    }
 
     private void initToolBar() {
 
-//        btn_menu_more.setVisibility(View.VISIBLE);
-//        btn_menu_more.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showPopWindow();
-//            }
-//        });
+        actionMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopWindow();
+            }
+        });
     }
 
     private ObjectAnimator animator;
@@ -375,35 +317,7 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
                         if (app.manager.cubicBLEDevice != null) {
                             app.manager.cubicBLEDevice.disconnectedDevice();
                         }
-                        final String deviceNum = RequestUtils.getSharepreference(DeviceDetailActivity.this).getString(RequestUtils.DEVICE, "");
-                        NetWorkRequest.deleteBlueToothIsBind(deviceNum, new FindCallback<AVObject>() {
-                            @Override
-                            public void done(List<AVObject> list, AVException e) {
-                                if (e == null) {
-                                    for (int i = 0; i < list.size(); i++) {
-                                        AVObject avObjects = list.get(i);
-                                        avObjects.deleteInBackground(new DeleteCallback() {
-                                            @Override
-                                            public void done(AVException e) {
-                                                dismissProgressDialog();
-                                                if (e == null) {
-                                                    ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.unbound_success));
-                                                    removeIContent(deviceNum);
-                                                    Intent intent = new Intent();
-                                                    setResult(Activity.RESULT_OK, intent);
-                                                    finish();
-                                                } else {
-                                                    checkNetWork();
-                                                }
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    dismissProgressDialog();
-                                    checkNetWork();
-                                }
-                            }
-                        });
+                        present.deleteBindDevice(selectAddress);
                         dialog.dismiss();
                     }
                 });
@@ -460,8 +374,8 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         View viewDialog = getLayoutInflater().inflate(R.layout.textview_popwindow, null);
         final EditText editText = viewDialog.findViewById(R.id.editText_weight);
         editText.setHint(selectName);
-        TextView leftButton =  viewDialog.findViewById(R.id.cancle_button);
-        TextView rightButtton =  viewDialog.findViewById(R.id.confirm_button);
+        TextView leftButton = viewDialog.findViewById(R.id.cancle_button);
+        TextView rightButtton = viewDialog.findViewById(R.id.confirm_button);
         mPopupdialog = new Dialog(this, R.style.MyDialogStyleBottom);
         mPopupdialog.setContentView(viewDialog, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -483,7 +397,7 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
                 mPopupdialog.dismiss();
                 String name = editText.getText().toString();
                 if (!TextUtils.isEmpty(name)) {
-                    sendNameToServer(name);
+                    present.sendNameToServer(name, selectAddress);
                 } else {
                     ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.name_not));
                 }
@@ -491,57 +405,6 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         });
     }
 
-    private void sendNameToServer(final String name) {
-        NetWorkRequest.sendNameToServer(name, selectAddress, new SaveCallback() {
-            @Override
-            public void done(AVException e) {
-                if (e == null) {
-                    ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.name_change_sucess));
-                    refreshList();
-                } else {
-                    checkNetWork();
-                }
-            }
-        });
-    }
-
-    private void refreshList() {
-
-        netWorkRequest.getDeviceUser(new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    for (AVObject avObject : list) {
-                        String address = avObject.getString("bluetoothDeviceId");
-                        String name = avObject.getString("bluetoothName");
-                        String deviceType = avObject.getString(NetWorkRequest.FUNCTION_TYPE);
-                        String functionType = avObject.getString(NetWorkRequest.FUNCTION_TYPE);
-                        String company = avObject.getString(NetWorkRequest.COMPANY);
-                        if (address != null) {
-                            content.addressList.add(new DeviceCarBean(name, address, deviceType, functionType, company));
-                        }
-                    }
-                } else {
-                    checkNetWork();
-                }
-
-            }
-        });
-    }
-
-    private void sendWeightToServer(final String weight) {
-
-        NetWorkRequest.sendAadultWeight(weight, new SaveCallback() {
-            @Override
-            public void done(AVException e) {
-                if (e == null) {
-                    weight_parent.setText(weight);
-                } else {
-                    checkNetWork();
-                }
-            }
-        });
-    }
 
     private Dialog mPicChooserDialog = null;
 
@@ -699,7 +562,6 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
             electric_rate.setText(getResources().getString(R.string.electricity, 0 + "%"));
 
             if (isopen_Auto_brake) {
-                L.e("======", "================" + isopen_Auto_brake);
                 image_wheel_detail.setVisibility(View.VISIBLE);
                 image_brake_detail.setVisibility(View.VISIBLE);
                 if (isRun) {
@@ -721,33 +583,35 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         }
     }
 
-    private void saveDataToServer() {
+    private void setTextWithData() {
         text_speed_detail.setText(travelInfoEntity.getAverageSpeed());
         text_today_mileage.setText(travelInfoEntity.getTodayMileage());
         text_total_mileage.setText(travelInfoEntity.getTotalMileage());
-        if (content.address != null) {
-            NetWorkRequest.saveDataToServer(content.address, travelInfoEntity.getTodayMileage(),
-                    travelInfoEntity.getTotalMileage(), travelInfoEntity.getAverageSpeed(), content.clickPositionType, new SaveCallback() {
-                @Override
-                public void done(AVException e) {
-                    if (e == null) {
-                        getCalor();
-                        getTravelInfo();
-                    } else {
-                        checkNetWork();
-                    }
-                }
-            });
-        }
+    }
+
+    @Override
+    public void initDataFromServer() {
+        present.getAdultWeight();
+        present.getTravelInfo(selectAddress, this);
+    }
+
+    @Override
+    protected DeviceDetailPresent createPresent() {
+        return new DeviceDetailPresent();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-      
-
+        if (app.manager.cubicBLEDevice != null) {
+            app.manager.cubicBLEDevice.removeDelegate();
+        }
         unregisterReceiver(mBroadcastReceiver);
+
+        if (dialogUtil != null){
+            dialogUtil.removeConfirmClick();
+        }
+        IContent.IS_DETAIL = false;
     }
 
     @Override
@@ -769,8 +633,11 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
             deviceFunction = intent.getStringExtra(content.clickPositionFunction);
         }
 
+        IContent.IS_DETAIL = true;
 
-        layout = findViewById(R.id.layout);
+        include = findViewById(R.id.include);
+        actionMore = findViewById(R.id.actionMore);
+        initToolBar(include, selectName);
         mImage = findViewById(R.id.image_electricity_bac);
         image_edit_detail = findViewById(R.id.image_edit_detail);
         image_wheel_detail = findViewById(R.id.image_wheel_detail);
@@ -833,9 +700,9 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         });
         mSeekBar.setMax(6);
         mSeekBar.setProgress(0);
-        for (int i = 0; i < imageView.length; i++) {
-            imageView[i] = findViewById(id[i]);
-        }
+//        for (int i = 0; i < imageView.length; i++) {
+//            imageView[i] = findViewById(id[i]);
+//        }
         image_edit_detail.setOnClickListener(this);
         app = (MyApplication) getApplication();
 
@@ -847,32 +714,31 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         image_elec_relayout.measure(w, h);
         height = image_elec_relayout.getMeasuredHeight();
         netWorkRequest = new NetWorkRequest(this);
-        getCalor();
-        getTravelInfo();
+
+
         initToolBar();
         initView();
         if (app.manager.cubicBLEDevice != null) {
             if (IContent.isBLE) {
- 
-             
-                showProgressDialog(getResources().getString(R.string.data_update), getString(R.string.data_update_fail));
+                showProgressBar(getResources().getString(R.string.data_update), getString(R.string.data_update_fail),10);
                 app.manager.cubicBLEDevice.writeValue(IContent.SERVERUUID_BLE, IContent.WRITEUUID_BLE, IContent.NOTIFY_DATA);
             } else {
-
-             
                 refreshOpne();
             }
         } else {
-            showProgressDialogDis(getResources().getString(R.string.data_update), 25000, getString(R.string.data_update_fail));
-            manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-            bleAdapter = manager.getAdapter();
-            app.manager.bluetoothDevice = bleAdapter.getRemoteDevice(selectAddress);
-            app.manager.isEnabled(this);
-            app.manager.cubicBLEDevice = new CubicBLEDevice(
-                    this, app.manager.bluetoothDevice);
-         
+            showProgressBar(getResources().getString(R.string.data_update), 25000, getString(R.string.data_update_fail), true);
+            scanAndConnectBluetooth(selectAddress, selectName);
+
         }
         dialogUtil = DialogUtil.getIntence();
+    }
+
+    @Override
+    public void connect() {
+        super.connect();
+        if (app.manager.cubicBLEDevice != null) {
+            app.manager.cubicBLEDevice.setBLEBroadcastDelegate(this);
+        }
     }
 
     @Override
@@ -881,221 +747,202 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
     }
 
     @Override
-    public void onReceive(Context context, Intent intent, final String macData, String uuid) {
+    public void describeDown(Intent intent) {
+        super.describeDown(intent);
+        sendBlueToothByte(IContent.NOTIFY_DATA);
+    }
 
-        if (intent == null) {
+    @Override
+    public void dataAvailable(Intent intent) {
+        super.dataAvailable(intent);
+
+        dismissProgressDialog();
+        byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
+        if (!IContent.isBLE) {
             return;
         }
-
-        String action = intent.getAction();
-        if (action == null) {
-            return;
+        if (data[3] == (byte) 0x81 && data[4] == 0x03) {
+            if (data[5] == 0x01) {
+                content.SD_Mode = true;
+            }
         }
-        if (RFStarBLEService.ACTION_GATT_CONNECTED.equals(action)) {
+        if (data[3] == (byte) 0x8B && data[4] == 0x08) {
+            String str = "V1.0." + data[5];
+            content.code = str;
 
-            netWorkRequest.updateUUIDCreatAt(macData, new SaveCallback() {
-                @Override
-                public void done(AVException e) {
-
+            if ("V1.0.3".equals(str)) {
+                SharedPreferences sp = getSharedPreferences(IContent.IS_FIRST_USE, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                if (sp.getBoolean(IContent.IS_VERSION, true)) {
+                    dialogUtil.showDialogNoConfirm(DeviceDetailActivity.this);
+                    editor.putBoolean(IContent.IS_VERSION, false).apply();
                 }
-            });
-        } else if (RFStarBLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
-            content.isBind = false;
-            content.address = null;
-            content.deviceName = null;
+            }
+            if (!low_elec && content.newCode != null && content.newCode.compareToIgnoreCase(content.code) == 1) {
+                SharedPreferences sp = getSharedPreferences(IContent.IS_FIRST_USE, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                if (!content.newCode.equals(sp.getString(IContent.VERSION_UPDATE, "V1.0.2"))) {
+                    dialogUtil.setConfirmClick(this);
+                    dialogUtil.showDialogConfirm(DeviceDetailActivity.this);
+                    editor.putString(IContent.VERSION_UPDATE, content.newCode).apply();
+                }
+            }
+
+            toSendData(data);
+
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x01) {
+            int averageSpeed0 = data[6] & 0xff;
+            int today_mileage0 = data[8] & 0xff;
+            int total_mileage0 = data[10] & 0xff;
+            int averageSpeed1 = (data[5] << 8) & 0xff;
+            int today_mileage1 = (data[7] << 8) & 0xff;
+            int total_mileage1 = (data[9] << 8) & 0xff;
+
+            double today_mileage = (today_mileage0 + today_mileage1) * 1.0 / 100;
+            double total_mileage = (total_mileage0 + total_mileage1) * 1.0 / 10;
+            double averageSpeed = (averageSpeed0 + averageSpeed1) * 1.0 / 10;
+
+            travelInfoEntity.setTodayMileage(String.valueOf(today_mileage));
+            travelInfoEntity.setTotalMileage(String.valueOf(total_mileage));
+            travelInfoEntity.setAverageSpeed(String.valueOf(averageSpeed));
+            present.senTravelInfoToServer(today_mileage, total_mileage, averageSpeed, deviceFunction);
+            setTextWithData();
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x07) {
+            elec = data[5] & 0xff;
+            refreshOpne();
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x04) {
+            if (data[5] == 0x00) {
+                isRun = true;
+                if (isopen_Auto_brake) {
+                    mSeekBar.setEnabled(false);
+                    layout_seekbar_detail.setEnabled(true);
+                    layout_seekbar_detail.setFocusable(true);
+                    layout_seekbar_detail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ToastUtil.showToast(DeviceDetailActivity.this, getString(R.string.run_action_notice));
+                        }
+                    });
+                }
+            } else if (data[5] == 0x55) {
+                isRun = false;
+                mSeekBar.setEnabled(true);
+                layout_seekbar_detail.setFocusable(false);
+                layout_seekbar_detail.setOnClickListener(null);
+            }
+            onResume();
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x05) {
+
+            if (data[5] == 0x01) {
+                mSwitchCompat.setChecked(true);
+                switch_brake_close.setEnabled(false);
+                switch_brake_close.setThumbResource(R.drawable.seek_button_close);
+                car_protect_state = true;
+            } else {
+                mSwitchCompat.setChecked(false);
+                switch_brake_close.setEnabled(true);
+                switch_brake_close.setThumbResource(R.drawable.play_plybar_btn);
+                car_protect_state = false;
+            }
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x09) {
+            mSeekBar.setProgress(data[5]);
+            initSeekBar(data[5]);
+        }
+        if (data[3] == (byte) 0x8B && data[4] == (byte) 0xAA) {
+            ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.close_sucess));
+            if (app.manager.cubicBLEDevice != null) {
+                app.manager.cubicBLEDevice.disconnectedDevice();
+            }
             refresh_close();
-        } else if (RFStarBLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+            return;
+        }
+        if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0D) {
+            switch_brake_close.setChecked(false);
+            protect_layout.setAlpha(0.3f);
+            mSwitchCompat.setThumbResource(R.drawable.seek_button_close);
+            mSwitchCompat.setEnabled(false);
+            refresh_wheel_close();
 
-            content.isBind = true;
-            content.address = macData;
-            content.deviceName = selectName;
+        }
+        if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0E) {
+            switch_brake_close.setChecked(true);
+            protect_layout.setAlpha(1f);
+            mSwitchCompat.setThumbResource(R.drawable.play_plybar_btn);
+            mSwitchCompat.setEnabled(true);
+            refresh_wheel_open();
+        }
+        if (data[3] == (byte) 0x83) {
+            doMusic(data);
+        }
+    }
 
-        } else if (RFStarBLEService.DESCRIPTOR_WRITER_DONE
-                .equals(action)) {
-            app.manager.cubicBLEDevice.writeValue(IContent.SERVERUUID_BLE, IContent.WRITEUUID_BLE, IContent.NOTIFY_DATA);
-        } else if (action.equals(RFStarBLEService.ACTION_WRITE_DONE)) {
+    @Override
+    public void disConnect(Intent intent) {
+        super.disConnect(intent);
+        content.isBind = false;
+        content.address = null;
+        content.deviceName = null;
+        refresh_close();
+    }
 
-            if (content.WRITEVALUE != null) {
-                app.manager.cubicBLEDevice.readValue(IContent.SERVERUUID_BLE, IContent.READUUID_BLE, content.WRITEVALUE);
-            }
-        } else if (action.equals(RFStarBLEService.ACTION_DATA_AVAILABLE)) {
+    @Override
+    public void dataAvailableRead(Intent intent) {
+        super.dataAvailableRead(intent);
+        byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
 
-            dismissProgressDialog();
-            byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
-            if (!IContent.isBLE) {
-                return;
-            }
-            if (data[3] == (byte) 0x81 && data[4] == 0x03) {
-                if (data[5] == 0x01) {
-                    content.SD_Mode = true;
-                }
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x08) {
-                String str = "V1.0." + data[5];
-                content.code = str;
-
-                if ("V1.0.3".equals(str)) {
-                    SharedPreferences sp = getSharedPreferences(IContent.IS_FIRST_USE, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
-                    if (sp.getBoolean(IContent.IS_VERSION, true)) {
-                        dialogUtil.showDialogNoConfirm(DeviceDetailActivity.this);
-                        editor.putBoolean(IContent.IS_VERSION, false).apply();
-                    }
-                }
-                if (!low_elec && content.newCode != null && content.newCode.compareToIgnoreCase(content.code) == 1) {
-                    SharedPreferences sp = getSharedPreferences(IContent.IS_FIRST_USE, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
-                    if (!content.newCode.equals(sp.getString(IContent.VERSION_UPDATE, "V1.0.2"))) {
-                        dialogUtil.setConfirmClick(this);
-                        dialogUtil.showDialogConfirm(DeviceDetailActivity.this);
-                        editor.putString(IContent.VERSION_UPDATE, content.newCode).apply();
-                    }
-                }
-
-                toSendData(data);
-
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x01) {
-                int averageSpeed0 = data[6] & 0xff;
-                int today_mileage0 = data[8] & 0xff;
-                int total_mileage0 = data[10] & 0xff;
-                int averageSpeed1 = (data[5] << 8) & 0xff;
-                int today_mileage1 = (data[7] << 8) & 0xff;
-                int total_mileage1 = (data[9] << 8) & 0xff;
-
-                double today_mileage = (today_mileage0 + today_mileage1) * 1.0 / 100;
-                double total_mileage = (total_mileage0 + total_mileage1) * 1.0 / 10;
-                double averageSpeed = (averageSpeed0 + averageSpeed1) * 1.0 / 10;
-
-                travelInfoEntity.setTodayMileage(String.valueOf(today_mileage));
-                travelInfoEntity.setTotalMileage(String.valueOf(total_mileage));
-                travelInfoEntity.setAverageSpeed(String.valueOf(averageSpeed));
-                saveDataToServer();
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x07) {
-                elec = data[5] & 0xff;
-                refreshOpne();
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x04) {
-                if (data[5] == 0x00) {
-                    isRun = true;
-                    if (isopen_Auto_brake) {
-                        mSeekBar.setEnabled(false);
-                        layout_seekbar_detail.setEnabled(true);
-                        layout_seekbar_detail.setFocusable(true);
-                        layout_seekbar_detail.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ToastUtil.showToast(DeviceDetailActivity.this, getString(R.string.run_action_notice));
-                            }
-                        });
-                    }
-                } else if (data[5] == 0x55) {
-                    isRun = false;
-                    mSeekBar.setEnabled(true);
-                    layout_seekbar_detail.setFocusable(false);
-                    layout_seekbar_detail.setOnClickListener(null);
-                }
-                onResume();
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x05) {
-
-                if (data[5] == 0x01) {
-                    mSwitchCompat.setChecked(true);
-                    switch_brake_close.setEnabled(false);
-                    switch_brake_close.setThumbResource(R.drawable.seek_button_close);
-                    car_protect_state = true;
-                } else {
-                    mSwitchCompat.setChecked(false);
-                    switch_brake_close.setEnabled(true);
-                    switch_brake_close.setThumbResource(R.drawable.play_plybar_btn);
-                    car_protect_state = false;
-                }
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x09) {
-                mSeekBar.setProgress(data[5]);
-                initSeekBar(data[5]);
-            }
-            if (data[3] == (byte) 0x8B && data[4] == (byte) 0xAA) {
-                ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.close_sucess));
-                if (app.manager.cubicBLEDevice != null) {
-                    app.manager.cubicBLEDevice.disconnectedDevice();
-                }
-                refresh_close();
-                return;
-            }
-            if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0D) {
-                switch_brake_close.setChecked(false);
-                protect_layout.setAlpha(0.3f);
-                mSwitchCompat.setThumbResource(R.drawable.seek_button_close);
-                mSwitchCompat.setEnabled(false);
-                refresh_wheel_close();
-
-            }
-            if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0E) {
-                switch_brake_close.setChecked(true);
-                protect_layout.setAlpha(1f);
-                mSwitchCompat.setThumbResource(R.drawable.play_plybar_btn);
-                mSwitchCompat.setEnabled(true);
-                refresh_wheel_open();
-            }
-            if (data[3] == (byte) 0x83) {
-                L.e("=========doMusic(data)==========", Tools.byte2Hex(data));
-                doMusic(data);
+        if (data[3] == (byte) 0x8B && data[4] == (byte) 0xAA) {
+            ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.close_sucess));
+            if (app.manager.cubicBLEDevice != null) {
+                app.manager.cubicBLEDevice.disconnectedDevice();
             }
 
-        } else if (action.equals(RFStarBLEService.ACTION_DATA_AVAILABLE_READ)) {
-            byte[] data = intent.getByteArrayExtra(RFStarBLEService.EXTRA_DATA);
+            refresh_close();
+            return;
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x05) {
+            if (data[5] == 0x01) {
+                mSwitchCompat.setChecked(true);
+                switch_brake_close.setEnabled(false);
+                switch_brake_close.setThumbResource(R.drawable.seek_button_close);
+                car_protect_state = true;
+            }
+            return;
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x06) {
+            if (data[5] == 0x00) {
+                mSwitchCompat.setChecked(false);
+                switch_brake_close.setEnabled(true);
+                switch_brake_close.setThumbResource(R.drawable.play_plybar_btn);
+                car_protect_state = false;
+            }
+            return;
+        }
+        if (data[3] == (byte) 0x8B && data[4] == 0x09) {
+            mSeekBar.setProgress(data[5]);
+            initSeekBar(data[5]);
+        }
 
-            if (data[3] == (byte) 0x8B && data[4] == (byte) 0xAA) {
-                ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.close_sucess));
-                if (app.manager.cubicBLEDevice != null) {
-                    app.manager.cubicBLEDevice.disconnectedDevice();
-                }
-
-                refresh_close();
-                return;
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x05) {
-                if (data[5] == 0x01) {
-                    mSwitchCompat.setChecked(true);
-                    switch_brake_close.setEnabled(false);
-                    switch_brake_close.setThumbResource(R.drawable.seek_button_close);
-                    car_protect_state = true;
-                }
-                return;
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x06) {
-                if (data[5] == 0x00) {
-                    mSwitchCompat.setChecked(false);
-                    switch_brake_close.setEnabled(true);
-                    switch_brake_close.setThumbResource(R.drawable.play_plybar_btn);
-                    car_protect_state = false;
-                }
-                return;
-            }
-            if (data[3] == (byte) 0x8B && data[4] == 0x09) {
-                mSeekBar.setProgress(data[5]);
-                initSeekBar(data[5]);
-            }
-
-            if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0D) {
-                switch_brake_close.setChecked(false);
-                protect_layout.setAlpha(0.3f);
-                mSwitchCompat.setThumbResource(R.drawable.seek_button_close);
-                mSwitchCompat.setEnabled(false);
-                ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.close_shake), Toast.LENGTH_SHORT);
-                refresh_wheel_close();
-                return;
-            }
-            if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0E) {
-                switch_brake_close.setChecked(true);
-                mSwitchCompat.setThumbResource(R.drawable.play_plybar_btn);
-                protect_layout.setAlpha(1f);
-                mSwitchCompat.setEnabled(true);
-                refresh_wheel_open();
-                return;
-            }
+        if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0D) {
+            switch_brake_close.setChecked(false);
+            protect_layout.setAlpha(0.3f);
+            mSwitchCompat.setThumbResource(R.drawable.seek_button_close);
+            mSwitchCompat.setEnabled(false);
+            ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.close_shake), Toast.LENGTH_SHORT);
+            refresh_wheel_close();
+            return;
+        }
+        if (data[3] == (byte) 0x8B && data[4] == (byte) 0x0E) {
+            switch_brake_close.setChecked(true);
+            mSwitchCompat.setThumbResource(R.drawable.play_plybar_btn);
+            protect_layout.setAlpha(1f);
+            mSwitchCompat.setEnabled(true);
+            refresh_wheel_open();
+            return;
         }
     }
 
@@ -1153,13 +1000,13 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
     }
 
     private void initSeekBar(int data) {
-        for (int i = 0; i < imageView.length; i++) {
-            if (i <= data) {
-                imageView[i].setImageResource(R.drawable.red_circle);
-            } else {
-                imageView[i].setImageResource(R.drawable.gray_circle);
-            }
-        }
+//        for (int i = 0; i < imageView.length; i++) {
+//            if (i <= data) {
+//                imageView[i].setImageResource(R.drawable.red_circle);
+//            } else {
+//                imageView[i].setImageResource(R.drawable.gray_circle);
+//            }
+//        }
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -1197,7 +1044,7 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
     @Override
     public void onClick(String weight) {
         weightPickerDialog.dismiss();
-        sendWeightToServer(weight);
+        present.sendWeightToServer(weight);
     }
 
     @Override
@@ -1206,6 +1053,79 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
         intent.putExtra("update", true);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void getCaloriesSuccess(TravelInfoEntity entity) {
+        weight_parent.setText(entity.getAdultWeight());
+    }
+
+    @Override
+    public void getCaloriesFailed(String message) {
+        checkNetWork();
+    }
+
+    @Override
+    public void getTravelInfoSuccess(TravelInfoEntity entity) {
+        text_today_calor.setText(entity.getTodayCalor());
+        total_calories.setText(entity.getTotalCalor());
+        text_today_mileage.setText(entity.getTodayMileage());
+        text_total_mileage.setText(entity.getTotalMileage());
+    }
+
+    @Override
+    public void getTravelInfoFailed(String message) {
+        checkNetWork();
+    }
+
+    @Override
+    public void sendTravelInfoToServerSuccess(TravelInfoEntity entity) {
+        OperateDBUtils operateDBUtils = new OperateDBUtils(this);
+        operateDBUtils.saveTravelInfoToDB(entity, Tools.getCurrentTime());
+        present.addServerToDB(entity.getTodayMileage(), this);
+
+
+    }
+
+    @Override
+    public void sendTravelInfoToServerFailed(String message) {
+        checkNetWork();
+    }
+
+    @Override
+    public void sendWeightSuccess(String weight) {
+        weight_parent.setText(weight);
+    }
+
+    @Override
+    public void sendWeightFailed(String message) {
+        checkNetWork();
+    }
+
+    @Override
+    public void unBindSuccess(String address) {
+        ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.unbound_success));
+        removeIContent(address);
+        Intent intent = new Intent();
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void unBindFailed(String message) {
+        checkNetWork();
+    }
+
+    @Override
+    public void loadSuccess(String s) {
+        ToastUtil.showToast(DeviceDetailActivity.this, getResources().getString(R.string.name_change_sucess));
+        initToolBar(include, s);
+        present.updateDeviceList();
+    }
+
+    @Override
+    public void loadFailed(String s) {
+        checkNetWork();
     }
 
     public class MyBroadcastReceiver extends BroadcastReceiver {
@@ -1251,7 +1171,7 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
 
         if (app.manager.cubicBLEDevice != null) {
             if (IContent.isBLE) {
-             
+
             }
         }
 
@@ -1286,4 +1206,6 @@ public class DeviceDetailActivity extends BaseCompatActivity implements View.OnC
             pd.dismiss();
         }
     };
+
+
 }

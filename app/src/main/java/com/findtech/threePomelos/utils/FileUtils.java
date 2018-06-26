@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +25,8 @@ import java.util.Date;
  * @author Administrator
  */
 public class FileUtils {
-    public static String FOLDERNAME = "三爸育儿";
+    // public static String FOLDERNAME = "三爸育儿";
+    public static String FOLDERNAME = "threepomelos";
     private static final boolean DEBUG = false;
 
     public static String SOURCE_IMAGE_FILEFOLDER_TEMP = Environment.getExternalStorageDirectory()
@@ -371,4 +371,5 @@ public class FileUtils {
         }
         return null;
     }
+
 }

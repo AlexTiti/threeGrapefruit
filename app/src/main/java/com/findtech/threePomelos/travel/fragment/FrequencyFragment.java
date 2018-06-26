@@ -3,24 +3,20 @@ package com.findtech.threePomelos.travel.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.findtech.threePomelos.R;
 import com.findtech.threePomelos.music.utils.HandlerUtil;
 import com.findtech.threePomelos.sdk.base.mvp.BaseFragmentMvp;
-import com.findtech.threePomelos.travel.activity.TravelDetailActivity;
-import com.findtech.threePomelos.travel.bean.FrequencyData;
-import com.findtech.threePomelos.travel.iterator.FrequencyStore;
 import com.findtech.threePomelos.travel.present.FrequencyPresent;
 import com.findtech.threePomelos.travel.view.FrequentyMvpView;
 import com.findtech.threePomelos.travel.view.TravelFrequencyView;
 import com.findtech.threePomelos.utils.MyCalendar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 
 import butterknife.BindView;
 
@@ -32,7 +28,7 @@ import butterknife.BindView;
  */
 
 public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, FrequencyPresent>
-        implements View.OnClickListener, FrequentyMvpView<HashMap<String,Integer>>,
+        implements View.OnClickListener, FrequentyMvpView<ArrayMap<String, Integer>>,
         TravelFrequencyView.OnChooseResultListener {
 
     @BindView(R.id.tv_week)
@@ -41,14 +37,16 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
     TextView tvMonth;
     @BindView(R.id.tv_show_detail)
     TextView tvShowDetail;
+    @BindView(R.id.tv_show_notice)
+    TextView tv_show_notice;
 
     private Handler handler;
     private int top;
     private int bottom;
     @BindView(R.id.frequencyView)
     TravelFrequencyView travelFrequencyView;
-    HashMap<String,Integer> dataArrayListWeek;
-    HashMap<String,Integer> dataArrayListMonth;
+    ArrayMap<String, Integer> dataArrayListWeek;
+    ArrayMap<String, Integer> dataArrayListMonth;
 
     public static FrequencyFragment newInstance() {
         Bundle args = new Bundle();
@@ -60,6 +58,11 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
     @Override
     public int getLayoutId() {
         return R.layout.activity_frequency;
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
     }
 
     @Override
@@ -131,10 +134,10 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
 
     private void setFrequencyWeek() {
         if (dataArrayListWeek != null) {
-            String text = String.valueOf(dataArrayListWeek.get(MyCalendar.getMonday())) ;
-            if (text == null){
+            String text = String.valueOf(dataArrayListWeek.get(MyCalendar.getMonday()));
+            if (text == null) {
                 tvShowDetail.setText("0");
-            }else {
+            } else {
                 tvShowDetail.setText(text);
             }
             travelFrequencyView.setDataArrayList(dataArrayListWeek, 30, 7);
@@ -146,10 +149,10 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
 
     private void setFrequencyMonth() {
         if (dataArrayListMonth != null) {
-            String text = String.valueOf(dataArrayListMonth.get(MyCalendar.getFirstOfMonth())) ;
-            if (text == null){
+            String text = String.valueOf(dataArrayListMonth.get(MyCalendar.getFirstOfMonth()));
+            if (text == null) {
                 tvShowDetail.setText("0");
-            }else {
+            } else {
                 tvShowDetail.setText(text);
             }
             travelFrequencyView.setDataArrayListMonth(dataArrayListMonth, 30, 30);
@@ -159,12 +162,17 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
     }
 
     @Override
-    public void loadSuccess(HashMap<String,Integer> frequencyStore) {
+    public void loadSuccess(ArrayMap<String, Integer> frequencyStore) {
         dataArrayListWeek = frequencyStore;
-        String text = String.valueOf(dataArrayListWeek.get(MyCalendar.getMonday())) ;
-        if (text == null){
+
+        String text = String.valueOf(dataArrayListWeek.get(MyCalendar.getMonday()));
+
+        if (text == null || "null".equals(text)) {
             tvShowDetail.setText("0");
-        }else {
+            tv_show_notice.setText(R.string.no_travel_week);
+        } else {
+            Date date = MyCalendar.getToday(MyCalendar.getMonday() + " 00:00:00");
+            getPresent().getAnalysis(date);
             tvShowDetail.setText(text);
         }
         travelFrequencyView.setDataArrayList(frequencyStore, 30, 7);
@@ -174,8 +182,8 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
     @Override
     public void loadFailed(String s) {
 
+        checkNetWork();
     }
-
 
 
     @Override
@@ -184,22 +192,27 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
     }
 
     @Override
-    public void onEndResult(String result) {
-        if (result == null){
-            tvShowDetail.setText("0");
-        }else {
-            tvShowDetail.setText(result);
+    public void onEndResult(String result, String date) {
+        tvShowDetail.setText(result);
+        Date date1 = MyCalendar.getToday(date + " 00:00:00");
+        if ("0".equals(result)) {
+            tv_show_notice.setText(R.string.no_travel_week);
+        } else {
+            getPresent().getAnalysis(date1);
         }
-
     }
 
     @Override
-    public void getFrequencyMonth(HashMap<String,Integer> frequencyStore) {
+    public void getFrequencyMonth(ArrayMap<String, Integer> frequencyStore) {
         dataArrayListMonth = frequencyStore;
-        String text = String.valueOf(dataArrayListMonth.get(MyCalendar.getFirstOfMonth())) ;
-        if (text == null){
+        String text = String.valueOf(dataArrayListMonth.get(MyCalendar.getFirstOfMonth()));
+
+        if (text == null || "null".equals(text)) {
             tvShowDetail.setText("0");
-        }else {
+            tv_show_notice.setText(R.string.no_travel_week);
+        } else {
+            Date date = MyCalendar.getToday(MyCalendar.getFirstOfMonth() + " 00:00:00");
+            getPresent().getAnalysis(date);
             tvShowDetail.setText(text);
         }
         travelFrequencyView.setDataArrayListMonth(frequencyStore, 30, 30);
@@ -212,6 +225,16 @@ public class FrequencyFragment extends BaseFragmentMvp<FrequencyFragment, Freque
 
     @Override
     public void getFrequencyMonthNetError() {
+
+    }
+
+    @Override
+    public void getFrequencyAnalysis(String message) {
+        tv_show_notice.setText(message);
+    }
+
+    @Override
+    public void getFrequencyAnalysisFailed(String message) {
 
     }
 }

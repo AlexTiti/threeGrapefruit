@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.findtech.threePomelos.utils.glide.GlideUtils;
 
 import java.util.List;
 
@@ -45,11 +45,8 @@ public class GuidePagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imageView = imageList.get(position);
 
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        ));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Glide.with(context).load(imageId[position]).into(imageView);
+
+        GlideUtils.glideToImageView(context,imageId[position],imageView);
         container.addView(imageView);
         return imageView;
     }

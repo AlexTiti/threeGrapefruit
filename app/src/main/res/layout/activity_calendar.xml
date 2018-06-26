@@ -3,7 +3,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <include
@@ -26,7 +26,8 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
@@ -38,22 +39,22 @@
             <com.findtech.threePomelos.view.calendar.MaterialCalendarView
                 android:id="@+id/cv_travel"
                 android:layout_width="match_parent"
-                android:layout_height="303dp"
+                android:layout_height="0dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:mcv_calendarMode="month"
+                app:mcv_firstDayOfWeek="monday"
                 app:mcv_headerTextAppearance="@style/MonthViewStyle"
                 app:mcv_showOtherDates="none"
                 app:mcv_tileSize="55sp"
                 app:mcv_weekDayTextAppearance="@style/WeekViewStyle">
-            </com.findtech.threePomelos.view.calendar.MaterialCalendarView>
 
+            </com.findtech.threePomelos.view.calendar.MaterialCalendarView>
 
             <TextView
                 android:id="@+id/divider"
                 android:layout_width="@dimen/dp_296"
-                android:layout_height="@dimen/dp_2"
+                android:layout_height="@dimen/dp_1"
                 android:layout_marginBottom="8dp"
                 android:background="@color/divider_color"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,8 +63,8 @@
 
             <ImageView
                 android:id="@+id/iv_date"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_130"
+                android:layout_width="@dimen/dp_250"
+                android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
                 android:src="@drawable/img_undo"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -97,22 +98,23 @@
                 android:id="@+id/cv_calendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_25"
                 android:layout_marginEnd="@dimen/dp_16"
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_15"
                 android:elevation="@dimen/dp_2"
                 android:translationZ="@dimen/dp_2"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_calendar">
 
                 <TextView
+                    android:id="@+id/tvAnalysis"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:padding="@dimen/dp_13"
                     android:textColor="@color/grey_color"
@@ -120,30 +122,30 @@
 
             </android.support.v7.widget.CardView>
 
-            <ImageView
-                android:id="@+id/iv_calendar_get"
-                android:layout_width="@dimen/dp_3"
-                android:layout_height="@dimen/dp_19"
-                android:layout_marginBottom="80dp"
-                android:layout_marginStart="@dimen/dp_18"
-                android:layout_marginTop="@dimen/dp_25"
-                android:scaleType="fitXY"
-                android:src="@drawable/travel_line_v"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_calendar" />
+            <!--<ImageView-->
+            <!--android:id="@+id/iv_calendar_get"-->
+            <!--android:layout_width="@dimen/dp_3"-->
+            <!--android:layout_height="@dimen/dp_19"-->
+            <!--android:layout_marginBottom="80dp"-->
+            <!--android:layout_marginStart="@dimen/dp_18"-->
+            <!--android:layout_marginTop="@dimen/dp_25"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@drawable/travel_line_v"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/cv_calendar" />-->
 
-            <TextView
-                android:id="@+id/tv_calendar_get"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_16"
-                android:text="@string/travel_reward"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/sp_19"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_calendar_get"
-                app:layout_constraintStart_toEndOf="@+id/iv_calendar_get"
-                app:layout_constraintTop_toTopOf="@id/iv_calendar_get" />
+            <!--<TextView-->
+            <!--android:id="@+id/tv_calendar_get"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/dp_16"-->
+            <!--android:text="@string/travel_reward"-->
+            <!--android:textColor="@color/text_black"-->
+            <!--android:textSize="@dimen/sp_19"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/iv_calendar_get"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/iv_calendar_get"-->
+            <!--app:layout_constraintTop_toTopOf="@id/iv_calendar_get" />-->
 
 
         </android.support.constraint.ConstraintLayout>

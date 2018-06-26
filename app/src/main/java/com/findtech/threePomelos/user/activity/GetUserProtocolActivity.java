@@ -39,8 +39,10 @@ public class GetUserProtocolActivity extends BaseCompatActivity {
     WebView webView_user_protect;
     @BindView(R.id.pb_user_protect)
     ProgressBar progressBar;
-    @BindView(R.id.container)
+
+    @BindView(R.id.containerUser)
     ConstraintLayout container;
+
     @BindView(R.id.include)
     View include;
 
@@ -88,6 +90,11 @@ public class GetUserProtocolActivity extends BaseCompatActivity {
                     public void accept(String s) throws Exception {
                         webView_user_protect.loadUrl(s);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        checkNetWork();
+                    }
                 });
 
         progressBar.setBackgroundColor(getResources().getColor(R.color.white));
@@ -102,6 +109,7 @@ public class GetUserProtocolActivity extends BaseCompatActivity {
     private void initWebView() {
 
         webView_user_protect = findViewById(R.id.webView_user_protect);
+
         webView_user_protect.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -126,14 +134,18 @@ public class GetUserProtocolActivity extends BaseCompatActivity {
                 }
             }
         });
+
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         container.removeView(webView_user_protect);
+        webView_user_protect.stopLoading();
+        webView_user_protect.getSettings().setJavaScriptEnabled(false);
+        webView_user_protect.clearHistory();
         webView_user_protect.removeAllViews();
         webView_user_protect.destroy();
+        super.onDestroy();
     }
 
 }

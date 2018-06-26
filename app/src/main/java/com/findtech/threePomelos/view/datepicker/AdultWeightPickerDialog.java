@@ -34,8 +34,8 @@ public class AdultWeightPickerDialog extends Dialog  {
     private WheelView weight_wheelView;
     private WeightTextAdapter weightTextAdapter;
     private ArrayList<String> weight_list = new ArrayList<>();
-    private int maxTextSize = 24;
-    private int midleTextSize = 18;
+    private int maxTextSize = 20;
+    private int midleTextSize = 16;
     private int minTextSize = 14;
     private String weight = "55";
     private OnWeightListener onWeightListener;

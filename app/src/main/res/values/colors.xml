@@ -31,7 +31,7 @@
     <color name="home_text_black">#333333</color>
     <color name="home_text_grey">#c3c7c9</color>
     <color name="list_divider_color">#dddddd</color>
-    <color name="text_pink">#f47686</color>
+    <color name="text_pink">#E04e63</color>
     <color name="text_grey">#666666</color>
     <!--mydatepicker-->
     <color name="province_line_border">#D0D0D0</color>
@@ -96,6 +96,23 @@
     <color name="six_two">#222222</color>
     <color name="dividerDetail">#f9f9f9</color>
     <color name="scale_travel">#6477f0</color>
+
+    <color name="sun_day_startColor">#4b8ff0</color>
+    <color name="sun_day_endColor">#5caaf1</color>
+    <color name="sun_night_startColor">#2f7baf</color>
+    <color name="sun_night_endColor">#154e8e</color>
+    <color name="rain_startColor">#879098</color>
+    <color name="rain_endColor">#bac2cd</color>
+    <color name="smog_startColor">#cbc6c0</color>
+    <color name="smog_endColor">#afa69c</color>
+    <color name="fog_startColor">#c2c6cb</color>
+    <color name="fog_endColor">#aab0b4</color>
+    <color name="sand_startColor">#e8b67a</color>
+    <color name="sand_endColor">#ce9964</color>
+    <color name="baby_text_color">#1c1c1c</color>
+    <color name="travel_connect_color">#2d2d2d</color>
+
+
 
 
 </resources>

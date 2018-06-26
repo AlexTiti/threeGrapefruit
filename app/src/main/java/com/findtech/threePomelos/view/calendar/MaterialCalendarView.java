@@ -984,7 +984,7 @@ public class MaterialCalendarView extends ViewGroup {
         CalendarDay minDate = null;
         CalendarDay maxDate = null;
         List<CalendarDay> selectedDates = new ArrayList<>();
-        int firstDayOfWeek = Calendar.SUNDAY;
+        int firstDayOfWeek = Calendar.MONDAY;
         int orientation = 0;
         int tileWidthPx = -1;
         int tileHeightPx = -1;

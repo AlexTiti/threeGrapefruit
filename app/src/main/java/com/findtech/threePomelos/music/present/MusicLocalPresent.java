@@ -20,6 +20,7 @@ import io.reactivex.functions.Consumer;
  */
 
 public class MusicLocalPresent extends BasePresenterMvp<MusicLocalActivity, MusicModelImpl> {
+
     @Override
     public MusicModelImpl createModel() {
         return new MusicModelImpl();

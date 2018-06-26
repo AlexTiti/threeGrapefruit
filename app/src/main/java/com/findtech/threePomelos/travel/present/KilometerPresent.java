@@ -1,18 +1,16 @@
 package com.findtech.threePomelos.travel.present;
 
 import android.content.Context;
-import android.util.Log;
+import android.support.v4.util.ArrayMap;
 
 import com.findtech.threePomelos.sdk.base.mvp.BasePresenterMvp;
 import com.findtech.threePomelos.sdk.manger.RxHelper;
 import com.findtech.threePomelos.travel.bean.KilometerBean;
 import com.findtech.threePomelos.travel.fragment.KilometerFragment;
 import com.findtech.threePomelos.travel.model.KilometerModelImpl;
-import com.findtech.threePomelos.travel.bean.KilometerData;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -45,9 +43,9 @@ public class KilometerPresent extends BasePresenterMvp<KilometerFragment, Kilome
         }
         mRxManager.register(model.getKiloMeterList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HashMap<String,Float> >() {
+                .subscribe(new Consumer<ArrayMap<String, Float>>() {
                     @Override
-                    public void accept(HashMap<String,Float>  kilometerData) throws Exception {
+                    public void accept(ArrayMap<String, Float> kilometerData) throws Exception {
                         mView.loadSuccess(kilometerData);
 
                     }
@@ -61,24 +59,49 @@ public class KilometerPresent extends BasePresenterMvp<KilometerFragment, Kilome
 
     /**
      * 获取当天的出行信息
+     *
      * @param date 请求的日期
      */
-    public void getInfoWithDate(Date date){
+    public void getInfoWithDate(Date date) {
 
         mRxManager.register(model.getTravelBeans(date)
-        .compose(RxHelper.<ArrayList<KilometerBean>>rxSchedulerHelper())
-        .subscribe(new Consumer<ArrayList<KilometerBean>>() {
-            @Override
-            public void accept(ArrayList<KilometerBean> travelBeans) throws Exception {
-                mView.getDaySuccess(travelBeans);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                mView.loadFailed(throwable.toString());
+                .compose(RxHelper.<ArrayList<KilometerBean>>rxSchedulerHelper())
+                .subscribe(new Consumer<ArrayList<KilometerBean>>() {
+                    @Override
+                    public void accept(ArrayList<KilometerBean> travelBeans) throws Exception {
+                        mView.getDaySuccess(travelBeans);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.loadFailed(throwable.toString());
 
-            }
-        }));
+                    }
+                }));
+
+    }
+
+    /**
+     * 获取当天的出行分析信息
+     *
+     * @param date 请求的日期
+     */
+    public void getAnalysis(Date date) {
+
+        mRxManager.register(model.getTravelAnalysis(date)
+                .compose(RxHelper.<String>rxSchedulerHelper())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String string) throws Exception {
+                        mView.getDayAnalysis(string);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.getDayAnalysisFailed(throwable.toString());
+
+                    }
+                }));
 
     }
 }

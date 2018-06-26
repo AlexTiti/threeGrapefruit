@@ -12,18 +12,24 @@ import com.findtech.threePomelos.view.calendar.CalendarDay;
 import com.findtech.threePomelos.view.calendar.DayViewDecorator;
 import com.findtech.threePomelos.view.calendar.DayViewFacade;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Decorate a day by making the text big and bold
+ *
  * @author Administrator
  */
 public class OneDayDecorator implements DayViewDecorator {
 
     private CalendarDay date;
     private Drawable drawable;
+    private Drawable drawableActient;
+    private ArrayList<CalendarDay> calendarDayHashSet;
+
     public OneDayDecorator(Context context) {
         drawable = context.getResources().getDrawable(R.drawable.calendar_bg);
+        drawableActient = context.getResources().getDrawable(R.drawable.inset_travel_select);
         date = CalendarDay.today();
     }
 
@@ -34,7 +40,16 @@ public class OneDayDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.setSelectionDrawable(drawable);
+        if ( calendarDayHashSet != null && calendarDayHashSet.contains(date)) {
+            view.setSelectionDrawable(drawableActient);
+        } else {
+            view.setSelectionDrawable(drawable);
+        }
+
+    }
+
+    public void setCalendarDayHashSet(ArrayList<CalendarDay> calendarDayHashSet) {
+        this.calendarDayHashSet = calendarDayHashSet;
     }
 
     public void setDate(Date date) {

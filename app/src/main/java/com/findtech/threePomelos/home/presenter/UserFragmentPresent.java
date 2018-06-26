@@ -2,6 +2,7 @@ package com.findtech.threePomelos.home.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.animation.CycleInterpolator;
 
 import com.findtech.threePomelos.R;
 import com.findtech.threePomelos.database.OperateDBUtils;
@@ -55,12 +56,12 @@ public class UserFragmentPresent extends BasePresenterMvp<UserFragment, UserFrag
                 }));
     }
 
-    public void getBabyList() {
+    public void getBabyList(Context context) {
 
         if (model == null || mView == null) {
             return;
         }
-        mRxManager.register(model.getBabyList().compose(
+        mRxManager.register(model.getBabyList(context).compose(
                 RxHelper.<ArrayList<BabyInfoEntity>>rxSchedulerHelper()
         ).subscribe(new Consumer<ArrayList<BabyInfoEntity>>() {
             @Override
@@ -75,6 +76,27 @@ public class UserFragmentPresent extends BasePresenterMvp<UserFragment, UserFrag
         }));
     }
 
+    public void queryBabyList(Context context) {
+
+        if (model == null || mView == null) {
+            return;
+        }
+        mRxManager.register(model.getDataBaseObservable(context).compose(
+                RxHelper.<ArrayList<BabyInfoEntity>>rxSchedulerHelper()
+        ).subscribe(new Consumer<ArrayList<BabyInfoEntity>>() {
+            @Override
+            public void accept(ArrayList<BabyInfoEntity> strings) throws Exception {
+                mView.loadSuccess(strings);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                mView.loadFailed(throwable.getMessage());
+            }
+        }));
+    }
+
+
     public void getCollectMusicCount(Context context) {
 
         if (model == null || mView == null) {
@@ -87,6 +109,7 @@ public class UserFragmentPresent extends BasePresenterMvp<UserFragment, UserFrag
                     @Override
                     public void accept(String aDouble) throws Exception {
                         mView.getCollectMusic(aDouble);
+                        UserInfo.getInstance().setCollectOnlyNumber(Integer.valueOf(aDouble));
                     }
                 }));
     }
@@ -101,7 +124,7 @@ public class UserFragmentPresent extends BasePresenterMvp<UserFragment, UserFrag
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String o) throws Exception {
-                        mView.deleteDeviceSuccess();
+                        mView.deleteDeviceSuccess(o);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -159,13 +182,13 @@ public class UserFragmentPresent extends BasePresenterMvp<UserFragment, UserFrag
                 }));
     }
 
-    public void deleteBaby(String baby) {
+    public void deleteBaby(int position, Context context) {
 
         if (model == null || mView == null) {
             return;
         }
-        mRxManager.register(model.deleteBaby(baby)
-                .compose(RxHelper.rxSchedulerHelper())
+        mRxManager.register(model.deleteBaby(position, context)
+                .compose(RxHelper.<String>rxSchedulerHelper())
                 .subscribe(new Consumer() {
                     @Override
                     public void accept(Object o) throws Exception {

@@ -7,6 +7,7 @@ import com.findtech.threePomelos.music.info.MusicInfo;
 import com.findtech.threePomelos.music.model.MusicCollectModelImpl;
 import com.findtech.threePomelos.sdk.base.mvp.BasePresenterMvp;
 import com.findtech.threePomelos.sdk.manger.RxHelper;
+import com.findtech.threePomelos.user.bean.UserInfo;
 
 import java.util.ArrayList;
 

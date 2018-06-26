@@ -42,14 +42,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             OperateDBUtils.BABYNATIVE + " text);";
 
 
-
     private static final String DB_TRAVEL_INFO_CREATE = "create table " + OperateDBUtils.TABLE_TRAVEL_INFO +
             " (" + OperateDBUtils.ID + " integer primary key autoincrement, " +
             OperateDBUtils.USER_ID + " text not null, " +
             OperateDBUtils.TIME + " text  not null, " +
             OperateDBUtils.TOTAL_MILEAGE + " text, " +
             OperateDBUtils.TODAY_MILEAGE + " text, " +
+            OperateDBUtils.TOTAL_CALOR + " text, " +
+            OperateDBUtils.TODAY_CALOR + " text, " +
+            OperateDBUtils.ADULT_WEIGHT + " text, " +
+            OperateDBUtils.BLUETOOTH_DEVICE_ID + " text, " +
             OperateDBUtils.AVERAGE_SPEED + " text);";
+
 
     /**
      * 新版运动数据库
@@ -67,6 +71,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             OperateDBUtils.DATE + " text not null, " +
             OperateDBUtils.USER_ID + " text not null, " +
             OperateDBUtils.FREQUENCY + " integer not null);";
+
+
+    private static final String DB_TRAVEL_ONCE_CREATE = "create table " + OperateDBUtils.TABLE_TRAVEL_ONCE +
+            " (" + OperateDBUtils.ID + " integer primary key autoincrement, " +
+            OperateDBUtils.USER_ID + " text not null, " +
+            OperateDBUtils.START_TIME + " text not null, " +
+            OperateDBUtils.END_TIME + " text not null, " +
+            OperateDBUtils.USE_TIME + " integer not null, " +
+            OperateDBUtils.MILEAGE + " integer not null, " +
+            OperateDBUtils.TRAVEL_DATE + " text not null);";
+
     /**
      * 月频率数据库
      */
@@ -77,21 +92,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             OperateDBUtils.FREQUENCY + " integer not null);";
 
 
-
     public DatabaseHelper(Context context) {
         super(context, OperateDBUtils.DATABASE_NAME, null, OperateDBUtils.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DB_WEIGHT_CREATE);
-        sqLiteDatabase.execSQL(DB_HEIGHT_CREATE);
         sqLiteDatabase.execSQL(DB_BABY_INFO_CREATE);
         sqLiteDatabase.execSQL(DB_TRAVEL_INFO_CREATE);
 
         sqLiteDatabase.execSQL(DB_TRAVEL_CREATE);
         sqLiteDatabase.execSQL(DB_FREQUENCY_WEEK_CREATE);
         sqLiteDatabase.execSQL(DB_FREQUENCY_WMONTH_CREATE);
+        sqLiteDatabase.execSQL(DB_TRAVEL_ONCE_CREATE);
     }
 
     @Override
@@ -116,6 +129,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DB_TRAVEL_CREATE);
         sqLiteDatabase.execSQL(DB_FREQUENCY_WEEK_CREATE);
         sqLiteDatabase.execSQL(DB_FREQUENCY_WMONTH_CREATE);
+        sqLiteDatabase.execSQL(DB_TRAVEL_ONCE_CREATE);
+
+        dropTable(DB_WEIGHT_CREATE);
+        dropTable(DB_HEIGHT_CREATE);
 
         sqLiteDatabase.execSQL("ALTER TABLE " + OperateDBUtils.TABLE_TRAVEL_INFO
                 + " ADD " + OperateDBUtils.TOTAL_CALOR + " text;");

@@ -86,20 +86,15 @@ public class MediaPlayerProxy implements Runnable {
                 if (client == null) {
                     continue;
                 }
-                L.e(LOG_TAG, "client connected" + client);
-
                 HttpURLConnection request = readRequest(client);
                 if (request != null) {
                     downloadThread = new RequestDealThread(mContext, request, client);
                     downloadThread.start();
                 }
             } catch (SocketTimeoutException e) {
-                // Do nothing
             } catch (IOException e) {
-
             }
         }
-        L.e(LOG_TAG, "Proxy interrupted. Shutting down.");
     }
 
     void http() {
